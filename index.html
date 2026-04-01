@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document Upload — BlackBytt</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --border: #222222;
+      --border-hover: #444444;
+      --accent: #ffffff;
+      --accent-dim: #888888;
+      --text: #f0f0f0;
+      --text-muted: #666666;
+      --success: #22c55e;
+      --error: #ef4444;
+      --warning: #f59e0b;
+      --radius: 8px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 540px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .header h1 {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      color: var(--text);
+    }
+
+    .header p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .card-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field label {
+      font-size: 12px;
+      color: var(--accent-dim);
+    }
+
+    .field input {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 13px;
+      padding: 9px 12px;
+      outline: none;
+      transition: border-color 0.15s;
+      width: 100%;
+    }
+
+    .field input:focus {
+      border-color: var(--border-hover);
+    }
+
+    .field input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .toggle-token {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 11px;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      align-self: flex-start;
+    }
+
+    .toggle-token:hover { color: var(--text); }
+
+    /* Drop zone */
+    .dropzone {
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 36px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      text-align: center;
+    }
+
+    .dropzone:hover,
+    .dropzone.dragover {
+      border-color: var(--border-hover);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .dropzone svg {
+      opacity: 0.3;
+    }
+
+    .dropzone .dz-label {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .dropzone .dz-label span {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .dropzone .dz-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    #file-input { display: none; }
+
+    /* File list */
+    .file-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 12px;
+    }
+
+    .file-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      background: #1a1a1a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .file-info {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .file-name {
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text);
+    }
+
+    .file-size {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .file-status {
+      flex-shrink: 0;
+      font-size: 11px;
+    }
+
+    .file-status.pending { color: var(--text-muted); }
+    .file-status.uploading { color: var(--warning); }
+    .file-status.done { color: var(--success); }
+    .file-status.error { color: var(--error); }
+
+    .remove-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 2px;
+      line-height: 0;
+      flex-shrink: 0;
+    }
+
+    .remove-btn:hover { color: var(--error); }
+
+    /* Upload button */
+    .upload-btn {
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 11px;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      width: 100%;
+    }
+
+    .upload-btn:hover:not(:disabled) { opacity: 0.88; }
+
+    .upload-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    /* Log */
+    .log {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px 14px;
+      font-size: 11px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      color: var(--text-muted);
+      max-height: 140px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .log-line { line-height: 1.5; }
+    .log-line.ok { color: var(--success); }
+    .log-line.err { color: var(--error); }
+    .log-line.info { color: var(--warning); }
+
+    .hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .hint a {
+      color: var(--accent-dim);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Document Upload</h1>
+      <p>Files are saved to <code style="font-size:11px;color:#555">Context/assets/</code> in your GitHub repo</p>
+    </div>
+
+    <!-- GitHub config -->
+    <div class="card">
+      <div class="card-title">GitHub Config</div>
+      <div class="field-row">
+        <div class="field">
+          <label>Owner / Org</label>
+          <input id="gh-owner" type="text" placeholder="your-username" />
+        </div>
+        <div class="field">
+          <label>Repository</label>
+          <input id="gh-repo" type="text" placeholder="BlackBytt" />
+        </div>
+      </div>
+      <div class="field">
+        <label>Branch</label>
+        <input id="gh-branch" type="text" placeholder="main" value="main" />
+      </div>
+      <div class="field">
+        <label>Personal Access Token</label>
+        <input id="gh-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" />
+        <button class="toggle-token" onclick="toggleToken()">show token</button>
+      </div>
+    </div>
+
+    <!-- Drop zone -->
+    <div class="card" style="gap:12px">
+      <div class="card-title">Files</div>
+
+      <div class="dropzone" id="dropzone" onclick="document.getElementById('file-input').click()">
+        <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
+        </svg>
+        <div class="dz-label"><span>Click to browse</span> or drag &amp; drop</div>
+        <div class="dz-sub">PDF, DOCX, TXT, MD, images — any file up to 25 MB</div>
+      </div>
+
+      <input type="file" id="file-input" multiple />
+
+      <div class="file-list" id="file-list"></div>
+
+      <button class="upload-btn" id="upload-btn" onclick="uploadAll()" disabled>
+        Upload to GitHub
+      </button>
+    </div>
+
+    <!-- Log -->
+    <div class="log" id="log" style="display:none"></div>
+
+    <p class="hint">
+      Token is never sent anywhere except <code style="font-size:10px">api.github.com</code>.<br/>
+      Use a fine-grained PAT with <strong>Contents: Read &amp; Write</strong> permission only.
+    </p>
+  </div>
+
+  <script>
+    const files = []; // { file, status: 'pending'|'uploading'|'done'|'error', sha?: string }
+
+    // --- Drag & drop ---
+    const dz = document.getElementById('dropzone');
+    const fi = document.getElementById('file-input');
+
+    dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
+    dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
+    dz.addEventListener('drop', e => {
+      e.preventDefault();
+      dz.classList.remove('dragover');
+      addFiles([...e.dataTransfer.files]);
+    });
+    fi.addEventListener('change', () => addFiles([...fi.files]));
+
+    function addFiles(newFiles) {
+      newFiles.forEach(f => {
+        if (!files.find(x => x.file.name === f.name && x.file.size === f.size)) {
+          files.push({ file: f, status: 'pending' });
+        }
+      });
+      fi.value = '';
+      renderList();
+    }
+
+    function removeFile(i) {
+      files.splice(i, 1);
+      renderList();
+    }
+
+    function ext(name) {
+      const parts = name.split('.');
+      return parts.length > 1 ? parts.pop().slice(0, 4) : 'file';
+    }
+
+    function fmtSize(n) {
+      if (n < 1024) return n + ' B';
+      if (n < 1024 * 1024) return (n / 1024).toFixed(1) + ' KB';
+      return (n / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    function statusLabel(s) {
+      return { pending: '—', uploading: 'uploading…', done: '✓ done', error: '✗ failed' }[s];
+    }
+
+    function renderList() {
+      const el = document.getElementById('file-list');
+      el.innerHTML = '';
+      files.forEach((item, i) => {
+        el.innerHTML += `
+          <div class="file-item">
+            <div class="file-icon">${ext(item.file.name)}</div>
+            <div class="file-info">
+              <div class="file-name">${item.file.name}</div>
+              <div class="file-size">${fmtSize(item.file.size)}</div>
+            </div>
+            <div class="file-status ${item.status}">${statusLabel(item.status)}</div>
+            ${item.status === 'pending' ? `<button class="remove-btn" onclick="removeFile(${i})" title="Remove">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>` : ''}
+          </div>`;
+      });
+      document.getElementById('upload-btn').disabled = files.filter(f => f.status === 'pending').length === 0;
+    }
+
+    // --- Log ---
+    function log(msg, type = '') {
+      const el = document.getElementById('log');
+      el.style.display = 'flex';
+      el.innerHTML += `<div class="log-line ${type}">${msg}</div>`;
+      el.scrollTop = el.scrollHeight;
+    }
+
+    // --- Token toggle ---
+    function toggleToken() {
+      const t = document.getElementById('gh-token');
+      const btn = document.querySelector('.toggle-token');
+      if (t.type === 'password') { t.type = 'text'; btn.textContent = 'hide token'; }
+      else { t.type = 'password'; btn.textContent = 'show token'; }
+    }
+
+    // --- GitHub upload ---
+    async function fileToBase64(file) {
+      return new Promise((res, rej) => {
+        const reader = new FileReader();
+        reader.onload = () => res(reader.result.split(',')[1]);
+        reader.onerror = rej;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function getFileSha(owner, repo, branch, path, token) {
+      const r = await fetch(
+        `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`,
+        { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' } }
+      );
+      if (r.status === 404) return null;
+      if (!r.ok) throw new Error(`SHA lookup failed: ${r.status}`);
+      const d = await r.json();
+      return d.sha;
+    }
+
+    async function uploadFile(owner, repo, branch, token, item) {
+      const path = `Context/assets/${item.file.name}`;
+      item.status = 'uploading';
+      renderList();
+      log(`↑ ${item.file.name}`, 'info');
+
+      try {
+        if (item.file.size > 25 * 1024 * 1024) throw new Error('File exceeds 25 MB GitHub limit');
+
+        const content = await fileToBase64(item.file);
+        const sha = await getFileSha(owner, repo, branch, path, token);
+
+        const body = {
+          message: `upload: add ${item.file.name}`,
+          content,
+          branch,
+          ...(sha ? { sha } : {})
+        };
+
+        const r = await fetch(
+          `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}`,
+          {
+            method: 'PUT',
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: 'application/vnd.github+json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+          }
+        );
+
+        if (!r.ok) {
+          const err = await r.json();
+          throw new Error(err.message || `HTTP ${r.status}`);
+        }
+
+        item.status = 'done';
+        log(`✓ ${item.file.name} → ${path}`, 'ok');
+      } catch (e) {
+        item.status = 'error';
+        log(`✗ ${item.file.name}: ${e.message}`, 'err');
+      }
+
+      renderList();
+    }
+
+    async function uploadAll() {
+      const owner = document.getElementById('gh-owner').value.trim();
+      const repo  = document.getElementById('gh-repo').value.trim();
+      const branch = document.getElementById('gh-branch').value.trim() || 'main';
+      const token = document.getElementById('gh-token').value.trim();
+
+      if (!owner || !repo || !token) {
+        log('✗ Fill in owner, repo, and token first.', 'err');
+        return;
+      }
+
+      document.getElementById('upload-btn').disabled = true;
+
+      const pending = files.filter(f => f.status === 'pending');
+      for (const item of pending) {
+        await uploadFile(owner, repo, branch, token, item);
+      }
+
+      renderList();
+    }
+  </script>
+</body>
+</html>
