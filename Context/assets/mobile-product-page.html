@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arctic Cold Brew — Bear With Me</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;900&family=Red+Hat+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary-white: #f8f3f8;
+      --card-black: #313131;
+      --secondary-black: #222;
+      --main-blue: #1e4abd;
+      --yellow: #f5a30a;
+      --crossed-grey: #8a8a8a;
+      --cross-grey: #606060;
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      background-color: var(--secondary-black);
+      color: var(--primary-white);
+      font-family: 'Red Hat Mono', monospace;
+      max-width: 390px;
+      margin: 0 auto;
+      padding-bottom: 100px;
+    }
+
+    /* ── TOP NAV ── */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--secondary-black);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(248,243,248,0.08);
+    }
+
+    .nav-hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--primary-white);
+      border-radius: 2px;
+    }
+
+    .nav-logo {
+      background: var(--main-blue);
+      border-radius: 12px;
+      padding: 6px 14px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      color: var(--primary-white);
+      text-transform: uppercase;
+    }
+
+    .nav-icons {
+      display: flex;
+      gap: 8px;
+    }
+    .nav-icon-btn {
+      width: 38px;
+      height: 38px;
+      background: var(--card-black);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .nav-icon-btn svg { width: 18px; height: 18px; stroke: var(--primary-white); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      padding: 10px 16px;
+      font-size: 11px;
+      color: var(--crossed-grey);
+      letter-spacing: 0.3px;
+    }
+    .breadcrumb span { color: var(--primary-white); }
+
+    /* ── IMAGE GALLERY ── */
+    .gallery {
+      margin: 0 16px;
+      background: var(--card-black);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .gallery-main {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+    }
+
+    .gallery-arrows {
+      position: absolute;
+      bottom: 80px;
+      right: 12px;
+      display: flex;
+      gap: 4px;
+    }
+    .gallery-arrow {
+      width: 36px;
+      height: 36px;
+      background: var(--primary-white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .gallery-arrow svg { width: 14px; height: 14px; stroke: #222; fill: none; stroke-width: 2.5; stroke-linecap: round; }
+
+    .gallery-thumbs {
+      display: flex;
+      gap: 8px;
+      padding: 8px;
+    }
+    .gallery-thumbs img {
+      width: calc(33.33% - 6px);
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 10px;
+      opacity: 0.6;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .gallery-thumbs img.active { opacity: 1; outline: 2px solid var(--primary-white); }
+
+    /* ── PRODUCT INFO CARD ── */
+    .product-card {
+      margin: 12px 16px 0;
+      background: var(--card-black);
+      border-radius: 20px;
+      padding: 20px;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .badge {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      padding: 4px 10px;
+      border-radius: 30px;
+      border: 0.6px solid var(--primary-white);
+      color: var(--primary-white);
+    }
+    .badge.sale {
+      border-color: var(--yellow);
+      color: var(--yellow);
+    }
+
+    .product-title {
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: 36px;
+      line-height: 40px;
+      letter-spacing: -2px;
+      text-transform: uppercase;
+      color: var(--primary-white);
+      margin-bottom: 12px;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .price-original {
+      font-family: 'Red Hat Mono', monospace;
+      font-size: 16px;
+      color: var(--crossed-grey);
+      text-decoration: line-through;
+    }
+    .price-sale {
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: 28px;
+      letter-spacing: -1px;
+      color: var(--primary-white);
+      text-transform: uppercase;
+    }
+
+    .rating-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .stars { display: flex; gap: 2px; }
+    .star { color: var(--yellow); font-size: 14px; }
+    .rating-text {
+      font-size: 12px;
+      color: var(--primary-white);
+    }
+
+    .product-desc {
+      font-size: 14px;
+      line-height: 20px;
+      color: var(--primary-white);
+      margin-bottom: 18px;
+    }
+
+    /* ── STOCK ── */
+    .stock-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .stock-dot {
+      width: 7px;
+      height: 7px;
+      background: #4ade80;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .stock-text { font-size: 14px; color: var(--primary-white); }
+
+    /* ── WEIGHT OPTIONS ── */
+    .weight-options {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .weight-btn {
+      flex: 1;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: 15px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s;
+    }
+    .weight-btn.default {
+      background: var(--card-black);
+      border-color: var(--primary-white);
+      color: var(--primary-white);
+    }
+    .weight-btn.selected {
+      background: var(--main-blue);
+      color: var(--primary-white);
+    }
+    .weight-btn.disabled {
+      background: var(--secondary-black);
+      color: var(--crossed-grey);
+    }
+
+    /* ── ADD TO CART ── */
+    .cart-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .qty-selector {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--card-black);
+      border: 1px solid var(--primary-white);
+      border-radius: 12px;
+      padding: 10px 14px;
+      width: 120px;
+      flex-shrink: 0;
+    }
+    .qty-btn {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .qty-btn svg { width: 16px; height: 16px; stroke: var(--primary-white); fill: none; stroke-width: 2.5; stroke-linecap: round; }
+    .qty-num {
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: 16px;
+      color: var(--primary-white);
+      flex: 1;
+      text-align: center;
+    }
+    .add-btn {
+      flex: 1;
+      height: 44px;
+      background: var(--yellow);
+      border: 1px solid #000;
+      border-radius: 12px;
+      box-shadow: 2px 2px 0 #000;
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: 14px;
+      color: #000;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: 0.3px;
+    }
+
+    /* ── PICKUP INFO ── */
+    .pickup-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .pickup-info p { font-size: 12px; color: var(--primary-white); line-height: 18px; }
+    .pickup-link {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--primary-white);
+      text-decoration: none;
+      border-bottom: 1px solid var(--main-blue);
+      width: fit-content;
+    }
+
+    /* ── SECTION HEADING ── */
+    .section-heading {
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--crossed-grey);
+      padding: 20px 16px 10px;
+    }
+
+    /* ── ACCORDION ── */
+    .accordion-list {
+      margin: 0 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .acc-card {
+      background: var(--card-black);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .acc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      gap: 16px;
+    }
+    .acc-title {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 500;
+      font-size: 14px;
+      color: var(--primary-white);
+      letter-spacing: -0.3px;
+    }
+    .acc-icon {
+      flex-shrink: 0;
+      width: 24px; height: 24px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .acc-icon svg { width: 18px; height: 18px; stroke: var(--primary-white); fill: none; stroke-width: 2; stroke-linecap: round; transition: transform 0.2s; }
+    .acc-card.open .acc-icon svg { transform: rotate(45deg); }
+
+    .acc-body {
+      display: none;
+      padding: 0 20px 16px;
+      font-size: 13px;
+      line-height: 20px;
+      color: var(--crossed-grey);
+    }
+    .acc-card.open .acc-body { display: block; }
+
+    /* ── INFO BLOCKS ── */
+    .info-card {
+      margin: 0 16px;
+      background: var(--card-black);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .info-block-title {
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: 14px;
+      color: var(--primary-white);
+      margin-bottom: 8px;
+    }
+    .info-block-text {
+      font-size: 13px;
+      line-height: 20px;
+      color: var(--crossed-grey);
+      margin-bottom: 8px;
+    }
+    .info-block-link {
+      font-size: 13px;
+      color: var(--main-blue);
+      text-decoration: none;
+      border-bottom: 1px solid var(--main-blue);
+      width: fit-content;
+    }
+    .info-divider {
+      height: 1px;
+      background: rgba(248,243,248,0.1);
+    }
+
+    /* ── FEATURED PRODUCTS ── */
+    .featured-header {
+      margin: 0 16px;
+      background: var(--card-black);
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .featured-title {
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: 22px;
+      text-transform: uppercase;
+      letter-spacing: -0.5px;
+      color: var(--primary-white);
+    }
+    .featured-view-all {
+      font-size: 12px;
+      color: var(--primary-white);
+      text-decoration: none;
+      border-bottom: 1px solid var(--main-blue);
+    }
+
+    .featured-scroll {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 10px 16px 4px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .featured-scroll::-webkit-scrollbar { display: none; }
+
+    .product-card-mini {
+      background: var(--card-black);
+      border-radius: 20px;
+      overflow: hidden;
+      width: 220px;
+      flex-shrink: 0;
+      scroll-snap-align: start;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .product-card-mini-img-wrap {
+      background: var(--secondary-black);
+      border-radius: 12px;
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .product-card-mini-img-wrap img {
+      height: 140px;
+      object-fit: contain;
+    }
+
+    .product-card-mini-badge {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 9px;
+      text-transform: uppercase;
+      border: 0.6px solid var(--primary-white);
+      border-radius: 30px;
+      padding: 3px 10px;
+      color: var(--primary-white);
+      width: fit-content;
+      margin: 0 auto;
+    }
+
+    .product-card-mini-name {
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: 16px;
+      letter-spacing: -0.3px;
+      text-align: center;
+      color: var(--primary-white);
+    }
+
+    .product-card-mini-desc {
+      font-size: 10px;
+      line-height: 14px;
+      color: var(--primary-white);
+      text-align: center;
+    }
+
+    .product-card-mini-price {
+      border: 0.7px solid var(--primary-white);
+      border-radius: 12px;
+      padding: 8px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .product-card-mini-price .orig {
+      color: var(--cross-grey);
+      font-size: 11px;
+      text-decoration: line-through;
+    }
+
+    .product-card-mini-actions {
+      display: flex;
+      gap: 6px;
+    }
+    .mini-add-btn {
+      flex: 1;
+      height: 38px;
+      background: var(--primary-white);
+      border: 1px solid var(--primary-white);
+      border-radius: 10px;
+      box-shadow: 2px 2px 0 #000;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      color: var(--card-black);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .mini-eye-btn {
+      width: 38px;
+      height: 38px;
+      background: var(--card-black);
+      border: 1px solid var(--primary-white);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .mini-eye-btn svg { width: 16px; height: 16px; stroke: var(--primary-white); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── NEWSLETTER ── */
+    .newsletter {
+      margin: 0 16px;
+      background: var(--main-blue);
+      border-radius: 20px;
+      padding: 28px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      text-align: center;
+    }
+    .newsletter-title {
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: 20px;
+      letter-spacing: -0.4px;
+      color: var(--primary-white);
+    }
+    .newsletter-sub {
+      font-size: 13px;
+      line-height: 20px;
+      color: var(--primary-white);
+      opacity: 0.85;
+    }
+    .newsletter-form {
+      display: flex;
+      gap: 6px;
+      width: 100%;
+    }
+    .newsletter-input {
+      flex: 1;
+      height: 40px;
+      background: var(--primary-white);
+      border: 1px solid var(--secondary-black);
+      border-radius: 10px;
+      padding: 0 14px;
+      font-family: 'Red Hat Mono', monospace;
+      font-size: 12px;
+      color: var(--cross-grey);
+      outline: none;
+    }
+    .newsletter-submit {
+      width: 40px;
+      height: 40px;
+      background: var(--yellow);
+      border: 1px solid var(--secondary-black);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .newsletter-submit svg { width: 16px; height: 16px; stroke: #000; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── STICKY BOTTOM BAR ── */
+    .sticky-bar {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 390px;
+      background: var(--card-black);
+      border-top: 2px solid var(--yellow);
+      border-radius: 16px 16px 0 0;
+      padding: 10px 16px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 200;
+    }
+
+    .sticky-product {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .sticky-thumb {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+    .sticky-info { display: flex; flex-direction: column; gap: 3px; }
+    .sticky-name {
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: 12px;
+      color: var(--primary-white);
+      white-space: nowrap;
+    }
+    .sticky-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sticky-weight {
+      background: var(--main-blue);
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: 11px;
+      color: var(--primary-white);
+    }
+    .sticky-price {
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: 14px;
+      color: var(--primary-white);
+    }
+
+    .sticky-actions {
+      display: flex;
+      gap: 8px;
+      flex: 1;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .sticky-qty {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--card-black);
+      border: 1px solid var(--primary-white);
+      border-radius: 10px;
+      padding: 8px 10px;
+    }
+    .sticky-qty-btn { cursor: pointer; display: flex; align-items: center; }
+    .sticky-qty-btn svg { width: 14px; height: 14px; stroke: var(--primary-white); fill: none; stroke-width: 2.5; stroke-linecap: round; }
+    .sticky-qty-num {
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: 14px;
+      color: var(--primary-white);
+    }
+    .sticky-add-btn {
+      height: 42px;
+      background: var(--yellow);
+      border: 1px solid #000;
+      border-radius: 10px;
+      box-shadow: 2px 2px 0 #000;
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: 12px;
+      color: #000;
+      text-transform: uppercase;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .spacer-sm { height: 12px; }
+    .spacer-md { height: 20px; }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <nav class="top-nav">
+    <div class="nav-hamburger">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="nav-logo">KOKO</div>
+    <div class="nav-icons">
+      <div class="nav-icon-btn">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </div>
+      <div class="nav-icon-btn">
+        <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">Home / Shop / <span>Arctic Cold Brew</span></div>
+
+  <!-- IMAGE GALLERY -->
+  <div class="gallery">
+    <img class="gallery-main" src="https://www.figma.com/api/mcp/asset/f2a11e67-2388-4a67-9f18-21b5a50c5e26" alt="Arctic Cold Brew" id="mainImg" />
+    <div class="gallery-arrows">
+      <div class="gallery-arrow" onclick="prevImg()">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      </div>
+      <div class="gallery-arrow" onclick="nextImg()">
+        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+    <div class="gallery-thumbs">
+      <img class="active" src="https://www.figma.com/api/mcp/asset/7292669f-1d39-4f78-80e5-f00b2cc44c55" alt="thumb 1" onclick="setImg(0,this)" />
+      <img src="https://www.figma.com/api/mcp/asset/3764fe77-c8f0-4c11-a479-8d1778caac06" alt="thumb 2" onclick="setImg(1,this)" />
+      <img src="https://www.figma.com/api/mcp/asset/0483a709-1ed3-4070-be59-cbfb021ec647" alt="thumb 3" onclick="setImg(2,this)" />
+    </div>
+  </div>
+
+  <!-- PRODUCT INFO CARD -->
+  <div class="product-card">
+    <div class="badge-row">
+      <div class="badge">Bear With Me</div>
+      <div class="badge sale">40% off</div>
+    </div>
+    <h1 class="product-title">Arctic Cold Brew</h1>
+    <div class="price-row">
+      <span class="price-original">$120</span>
+      <span class="price-sale">$104</span>
+    </div>
+    <div class="rating-row">
+      <div class="stars">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+      </div>
+      <span class="rating-text">4.8 · 3 reviews</span>
+    </div>
+    <p class="product-desc">Cold-extracted for 18 hours. Rich, smooth, and never bitter — a ritual worth waking up for. Every cup we make is traceable to its source.</p>
+    <div class="stock-row">
+      <div class="stock-dot"></div>
+      <span class="stock-text">In stock</span>
+    </div>
+    <div class="weight-options">
+      <div class="weight-btn default" onclick="selectWeight(this)">15g</div>
+      <div class="weight-btn selected" onclick="selectWeight(this)">25g</div>
+      <div class="weight-btn disabled" title="Out of stock">50g</div>
+    </div>
+    <div class="cart-row">
+      <div class="qty-selector">
+        <div class="qty-btn" onclick="changeQty(-1)">
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+        <span class="qty-num" id="qty">1</span>
+        <div class="qty-btn" onclick="changeQty(1)">
+          <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+      </div>
+      <button class="add-btn">Add to Cart</button>
+    </div>
+    <div class="pickup-info">
+      <p>Pickup available at Toronto-King street</p>
+      <p style="font-size:11px; color: var(--crossed-grey);">Usually ready in 24 hours</p>
+      <a href="#" class="pickup-link">Check availability at other stores</a>
+    </div>
+  </div>
+
+  <!-- ACCORDION FAQ -->
+  <div class="section-heading">Product FAQ</div>
+  <div class="accordion-list">
+
+    <div class="acc-card" onclick="toggleAcc(this)">
+      <div class="acc-header">
+        <span class="acc-title">About Product</span>
+        <div class="acc-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+      </div>
+      <div class="acc-body">Cold-extracted for 18 hours using filtered water. Rich, smooth, and never bitter — a ritual worth waking up for.</div>
+    </div>
+
+    <div class="acc-card" onclick="toggleAcc(this)">
+      <div class="acc-header">
+        <span class="acc-title">What makes KOKO cold brew different?</span>
+        <div class="acc-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+      </div>
+      <div class="acc-body">Every cup is traceable to its source. We cold-steep for 18 hours minimum — longer than most brands — for a richer, smoother result.</div>
+    </div>
+
+    <div class="acc-card" onclick="toggleAcc(this)">
+      <div class="acc-header">
+        <span class="acc-title">How should I store it?</span>
+        <div class="acc-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+      </div>
+      <div class="acc-body">Keep refrigerated and consume within 2 weeks of opening. Best served over ice.</div>
+    </div>
+
+    <div class="acc-card" onclick="toggleAcc(this)">
+      <div class="acc-header">
+        <span class="acc-title">Do you ship internationally?</span>
+        <div class="acc-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+      </div>
+      <div class="acc-body">Yes! Note that the customer is responsible for any customs charges or import duties at the destination.</div>
+    </div>
+
+  </div>
+
+  <div class="spacer-md"></div>
+
+  <!-- INFO BLOCKS -->
+  <div class="info-card">
+    <div>
+      <div style="font-family:'Inter',sans-serif; font-weight:900; font-size:13px; color:var(--primary-white); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.5px;">Our Promise</div>
+      <p style="font-size:13px; line-height:20px; color:var(--crossed-grey);">We aim to provide a safe space to talk about mental health, envisioning a culture that embraces vulnerability. Call Us Crazy!</p>
+    </div>
+    <div class="info-divider"></div>
+    <div>
+      <div class="info-block-title">📦 Delivery</div>
+      <p class="info-block-text">We'll do our best to get your order to you as quickly as possible. Good things come to those who wait.</p>
+      <a href="#" class="info-block-link">Discover more</a>
+    </div>
+    <div class="info-divider"></div>
+    <div>
+      <div class="info-block-title">🛃 Customs &amp; Import Duties</div>
+      <p class="info-block-text">The customer is solely responsible for any customs charges or delays. We're sorry, but we can't control the customs process.</p>
+    </div>
+  </div>
+
+  <div class="spacer-md"></div>
+
+  <!-- FEATURED PRODUCTS -->
+  <div class="featured-header">
+    <span class="featured-title">Featured Products</span>
+    <a href="#" class="featured-view-all">View All</a>
+  </div>
+
+  <div class="featured-scroll">
+    <div class="product-card-mini">
+      <div style="position:relative;">
+        <div class="product-card-mini-img-wrap">
+          <img src="https://www.figma.com/api/mcp/asset/4f092809-dfb0-4e39-ab98-3c5ece7c0d81" alt="Flat White" />
+        </div>
+        <div style="position:absolute;top:8px;left:8px;border:1px solid var(--primary-white);border-radius:8px;padding:4px 8px;font-family:'Inter',sans-serif;font-weight:900;font-size:10px;color:var(--primary-white);">60% off</div>
+      </div>
+      <div class="product-card-mini-badge">Bear With Me</div>
+      <div class="product-card-mini-name">Flat White</div>
+      <p class="product-card-mini-desc">A smooth, velvety blend of rich espresso and finely textured milk.</p>
+      <div class="product-card-mini-price"><span class="orig">$120</span><span>$104</span></div>
+      <div class="product-card-mini-actions">
+        <div class="mini-add-btn">Add to Cart</div>
+        <div class="mini-eye-btn"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+      </div>
+    </div>
+    <div class="product-card-mini">
+      <div class="product-card-mini-img-wrap">
+        <img src="https://www.figma.com/api/mcp/asset/f2c319d5-0d7f-40e7f-9ba0-24eb4d51b1fb" alt="OG Matcha" />
+      </div>
+      <div class="product-card-mini-badge">Bear With Me</div>
+      <div class="product-card-mini-name">The OG Matcha</div>
+      <p class="product-card-mini-desc">Stone-ground matcha blended into a smooth, earthy cup.</p>
+      <div class="product-card-mini-price"><span>$120</span></div>
+      <div class="product-card-mini-actions">
+        <div class="mini-add-btn">Add to Cart</div>
+        <div class="mini-eye-btn"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+      </div>
+    </div>
+    <div class="product-card-mini">
+      <div class="product-card-mini-img-wrap">
+        <img src="https://www.figma.com/api/mcp/asset/4285028a-6b2d-4b68-a838-3abe96f31b0d" alt="Caramel Drift" />
+      </div>
+      <div class="product-card-mini-badge">Bear With Me</div>
+      <div class="product-card-mini-name">Caramel Drift</div>
+      <p class="product-card-mini-desc">Rich caramel notes melting into a gently roasted base.</p>
+      <div class="product-card-mini-price"><span>$120</span></div>
+      <div class="product-card-mini-actions">
+        <div class="mini-add-btn">Add to Cart</div>
+        <div class="mini-eye-btn"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+      </div>
+    </div>
+    <div class="product-card-mini">
+      <div class="product-card-mini-img-wrap">
+        <img src="https://www.figma.com/api/mcp/asset/7222082f-9cce-4b0c-98c4-9162cb63f84b" alt="Oatmeal Blast" />
+      </div>
+      <div class="product-card-mini-badge">Bear With Me</div>
+      <div class="product-card-mini-name">Oatmeal Blast</div>
+      <p class="product-card-mini-desc">Creamy oat milk meets a mellow roast with subtle nutty warmth.</p>
+      <div class="product-card-mini-price"><span>$120</span></div>
+      <div class="product-card-mini-actions">
+        <div class="mini-add-btn">Add to Cart</div>
+        <div class="mini-eye-btn"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer-sm"></div>
+
+  <!-- NEWSLETTER -->
+  <div class="newsletter">
+    <p class="newsletter-title">Subscribe to our Newsletter</p>
+    <p class="newsletter-sub">Be the first to know about new collections and exclusive offers</p>
+    <div class="newsletter-form">
+      <input class="newsletter-input" type="email" placeholder="Email Address" />
+      <button class="newsletter-submit">
+        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="spacer-md"></div>
+
+  <!-- STICKY BOTTOM BAR -->
+  <div class="sticky-bar">
+    <div class="sticky-product">
+      <img class="sticky-thumb" src="https://www.figma.com/api/mcp/asset/38db93e7-257b-45e9-8fa1-61448ec46587" alt="Arctic Cold Brew" />
+      <div class="sticky-info">
+        <span class="sticky-name">Arctic Cold Brew</span>
+        <div class="sticky-meta">
+          <span class="sticky-weight">25g</span>
+          <span class="sticky-price">$104</span>
+        </div>
+      </div>
+    </div>
+    <div class="sticky-actions">
+      <div class="sticky-qty">
+        <div class="sticky-qty-btn" onclick="changeQty(-1)"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        <span class="sticky-qty-num" id="stickyQty">1</span>
+        <div class="sticky-qty-btn" onclick="changeQty(1)"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+      </div>
+      <button class="sticky-add-btn">Add to Cart</button>
+    </div>
+  </div>
+
+  <script>
+    // Gallery
+    const thumbSrcs = [
+      "https://www.figma.com/api/mcp/asset/7292669f-1d39-4f78-80e5-f00b2cc44c55",
+      "https://www.figma.com/api/mcp/asset/3764fe77-c8f0-4c11-a479-8d1778caac06",
+      "https://www.figma.com/api/mcp/asset/0483a709-1ed3-4070-be59-cbfb021ec647"
+    ];
+    let currentImg = 0;
+    const thumbEls = document.querySelectorAll('.gallery-thumbs img');
+    function setImg(idx, el) {
+      currentImg = idx;
+      document.getElementById('mainImg').src = thumbSrcs[idx];
+      thumbEls.forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+    }
+    function prevImg() { const i = (currentImg - 1 + 3) % 3; setImg(i, thumbEls[i]); }
+    function nextImg() { const i = (currentImg + 1) % 3; setImg(i, thumbEls[i]); }
+
+    // Weight
+    function selectWeight(el) {
+      if (el.classList.contains('disabled')) return;
+      document.querySelectorAll('.weight-btn').forEach(b => {
+        if (!b.classList.contains('disabled')) { b.classList.remove('selected'); b.classList.add('default'); }
+      });
+      el.classList.remove('default'); el.classList.add('selected');
+    }
+
+    // Quantity
+    let qty = 1;
+    function changeQty(d) {
+      qty = Math.max(1, qty + d);
+      document.getElementById('qty').textContent = qty;
+      document.getElementById('stickyQty').textContent = qty;
+    }
+
+    // Accordion
+    function toggleAcc(el) {
+      const wasOpen = el.classList.contains('open');
+      document.querySelectorAll('.acc-card').forEach(c => c.classList.remove('open'));
+      if (!wasOpen) el.classList.add('open');
+    }
+  </script>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+</body>
+</html>
