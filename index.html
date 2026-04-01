@@ -286,15 +286,26 @@
       setTimeout(() => el.classList.remove('show'), 3500);
     }
 
+    function toBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
     async function uploadOne(item) {
       item.status = 'uploading';
       render();
 
-      const form = new FormData();
-      form.append('file', item.file);
-
       try {
-        const res = await fetch('/api/upload', { method: 'POST', body: form });
+        const content = await toBase64(item.file);
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ filename: item.file.name, content }),
+        });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || `Error ${res.status}`);
         item.status = 'done';

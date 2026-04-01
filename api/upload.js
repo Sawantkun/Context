@@ -1,25 +1,12 @@
-const Busboy = require('busboy');
-
-// Disable Vercel's default body parser so we can handle multipart
-export const config = {
-  api: { bodyParser: false }
-};
-
-function parseFile(req) {
+function readBody(req) {
   return new Promise((resolve, reject) => {
-    const busboy = Busboy({ headers: req.headers });
-    const chunks = [];
-    let filename = 'upload';
-
-    busboy.on('file', (_field, stream, info) => {
-      filename = info.filename || filename;
-      stream.on('data', chunk => chunks.push(chunk));
-      stream.on('error', reject);
+    let data = '';
+    req.on('data', chunk => (data += chunk));
+    req.on('end', () => {
+      try { resolve(JSON.parse(data)); }
+      catch { reject(new Error('Invalid JSON body')); }
     });
-
-    busboy.on('finish', () => resolve({ filename, buffer: Buffer.concat(chunks) }));
-    busboy.on('error', reject);
-    req.pipe(busboy);
+    req.on('error', reject);
   });
 }
 
@@ -33,33 +20,25 @@ async function getFileSha(owner, repo, branch, path, token) {
   return (await r.json()).sha;
 }
 
-export default async function handler(req, res) {
-  // CORS for local dev
+async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const {
-    GITHUB_TOKEN,
-    GITHUB_OWNER,
-    GITHUB_REPO,
-    GITHUB_BRANCH = 'main',
-  } = process.env;
+  const { GITHUB_TOKEN, GITHUB_OWNER, GITHUB_REPO, GITHUB_BRANCH = 'main' } = process.env;
 
   if (!GITHUB_TOKEN || !GITHUB_OWNER || !GITHUB_REPO) {
-    return res.status(500).json({ error: 'Server is not configured. Set GITHUB_TOKEN, GITHUB_OWNER, GITHUB_REPO in Vercel env vars.' });
+    return res.status(500).json({ error: 'Server not configured — set GITHUB_TOKEN, GITHUB_OWNER, GITHUB_REPO in Vercel env vars.' });
   }
 
   try {
-    const { filename, buffer } = await parseFile(req);
+    const { filename, content } = await readBody(req);
 
-    if (!filename) return res.status(400).json({ error: 'No file received' });
-    if (buffer.length > 25 * 1024 * 1024) return res.status(413).json({ error: 'File exceeds 25 MB limit' });
+    if (!filename || !content) return res.status(400).json({ error: 'Missing filename or content' });
 
     const safeName = filename.replace(/[^a-zA-Z0-9._\-() ]/g, '_');
     const path = `Context/assets/${safeName}`;
-    const content = buffer.toString('base64');
 
     const sha = await getFileSha(GITHUB_OWNER, GITHUB_REPO, GITHUB_BRANCH, path, GITHUB_TOKEN);
 
@@ -74,7 +53,7 @@ export default async function handler(req, res) {
         },
         body: JSON.stringify({
           message: `docs: upload ${safeName}`,
-          content,
+          content, // already base64 from frontend
           branch: GITHUB_BRANCH,
           ...(sha ? { sha } : {}),
         }),
@@ -92,3 +71,5 @@ export default async function handler(req, res) {
     res.status(500).json({ error: e.message });
   }
 }
+
+module.exports = handler;
