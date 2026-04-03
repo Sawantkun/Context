@@ -1,0 +1,2813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1560">
+  <title>KOKO — Cold Brew Coffee v16</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Red+Hat+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #222222;
+      --card: #313131;
+      --white: #F8F3F8;
+      --blue: #1E4ABD;
+      --amber: #F5A30A;
+      --muted: #7C7C7C;
+      --grey: #606060;
+      --aaa: #AAAAAA;
+    }
+
+    body {
+      display: flex;
+      gap: 16px;
+      padding: 24px 24px 0;
+      background: var(--bg);
+      min-width: 1560px;
+      font-family: 'Inter', sans-serif;
+      align-items: flex-start;
+    }
+
+    /* ======== SIDEBAR ======== */
+    .sidebar {
+      width: 200px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: sticky;
+      top: 24px;
+    }
+
+    .sidebar-logo {
+      background: var(--blue);
+      border-radius: 16px;
+      height: 112px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sidebar-logo img {
+      width: 102px;
+      height: 96px;
+      object-fit: contain;
+    }
+
+    .sidebar-icon-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .sidebar-icon-btn {
+      background: var(--card);
+      border-radius: 10px;
+      height: 38px;
+      width: 96px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .sidebar-icon-btn img {
+      width: 19px;
+      height: 19px;
+      object-fit: contain;
+    }
+
+    .sidebar-search {
+      background: var(--card);
+      border-radius: 10px;
+      height: 38px;
+      width: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .sidebar-search img {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+    }
+
+    .sidebar-nav-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sidebar-nav-item {
+      background: var(--card);
+      border-radius: 15px;
+      height: 97px;
+      width: 200px;
+      display: flex;
+      align-items: flex-end;
+      padding: 16px;
+      cursor: pointer;
+      transition: height 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  background-color 0.3s ease;
+      overflow: hidden;
+    }
+
+    .sidebar-nav-item:hover {
+      height: 197px;
+      background: var(--blue);
+    }
+
+    .sidebar-nav-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sidebar-nav-inner img.nav-icon {
+      width: 23px;
+      height: 23px;
+      object-fit: contain;
+    }
+
+    .sidebar-nav-label {
+      font-weight: 900;
+      font-size: 16px;
+      line-height: 20px;
+      color: var(--white);
+      white-space: nowrap;
+    }
+
+    .sidebar-nav-label-row {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .sidebar-nav-arrow {
+      width: 15px;
+      height: 15px;
+      object-fit: contain;
+    }
+
+    /* ======== MAIN ======== */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    /* ======== ANNOUNCEMENT BAR ======== */
+    .announcement-bar {
+      height: 40px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--blue);
+      position: relative;
+    }
+
+    .announcement-track {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      white-space: nowrap;
+      animation: ticker 22s linear infinite;
+      width: max-content;
+    }
+
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    .ann-item {
+      display: flex;
+      align-items: center;
+      height: 40px;
+    }
+
+    .ann-text {
+      background: var(--blue);
+      border-radius: 12px;
+      padding: 8px 16px;
+      font-weight: 900;
+      font-size: 20px;
+      line-height: 24px;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .ann-sep {
+      background: var(--amber);
+      border-radius: 20px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .ann-sep img {
+      width: 31px;
+      height: 24px;
+      object-fit: contain;
+    }
+
+    /* ======== HERO ======== */
+    .hero {
+      display: grid;
+      grid-template-columns: 447px 402px 415px;
+      gap: 16px;
+      height: 503px;
+    }
+
+    /* Hero Left */
+    .hero-left {
+      background: var(--blue);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 24px;
+      height: 503px;
+    }
+
+    .hero-left-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .pill {
+      border: 0.7px solid var(--white);
+      border-radius: 55px;
+      padding: 4px 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      align-self: flex-start;
+    }
+
+    .pill span {
+      font-weight: 600;
+      font-size: 10px;
+      line-height: 12px;
+      color: var(--white);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .hero-headline {
+      font-weight: 900;
+      font-size: 38px;
+      line-height: 40px;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: -0.76px;
+    }
+
+    .hero-headline .accent { color: var(--amber); }
+
+    .hero-subtext {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 20px;
+      color: var(--white);
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .btn-amber {
+      background: var(--amber);
+      border: 1px solid #222;
+      border-radius: 12px;
+      box-shadow: 2px 2px 0 #000;
+      padding: 10px 20px;
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 24px;
+      color: #222;
+      text-transform: uppercase;
+      cursor: pointer;
+      white-space: nowrap;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 226px;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+
+    .btn-amber:hover {
+      transform: translate(2px, 2px);
+      box-shadow: none;
+    }
+
+    .btn-ghost-white {
+      border: 1px solid var(--white);
+      border-radius: 12px;
+      padding: 10px 20px;
+      font-weight: 900;
+      font-size: 16px;
+      line-height: 20px;
+      color: var(--white);
+      text-transform: uppercase;
+      cursor: pointer;
+      white-space: nowrap;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 157px;
+      position: relative;
+      overflow: hidden;
+      z-index: 0;
+      transition: color 0.35s ease, border-color 0.35s ease;
+    }
+
+    .btn-ghost-white::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--blue);
+      border-radius: 10px;
+      width: 0;
+      transition: width 0.35s ease;
+      z-index: -1;
+    }
+
+    .btn-ghost-white:hover::before { width: 100%; }
+    .btn-ghost-white:hover { color: var(--white); border-color: var(--blue); }
+
+    /* Hero Center */
+    .hero-center {
+      position: relative;
+      width: 402px;
+      height: 503px;
+      border-radius: 0;
+      overflow: hidden;
+    }
+
+    .hero-center > img.hero-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transform: none;   /* NO TILT */
+    }
+
+    .hero-koko-badge {
+      position: absolute;
+      top: 12px;
+      right: 21px;
+      width: 84px;
+      height: 85px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-koko-badge svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      animation: badge-spin 10s linear infinite;
+      transform-origin: 42px 42px;
+    }
+
+    @keyframes badge-spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .arrow-circle {
+      position: absolute;
+      left: 22px;
+      top: 23px;
+      background: var(--amber);
+      border: 1px solid #222;
+      border-radius: 50px;
+      width: 40px;
+      height: 39px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .arrow-circle img {
+      width: 19px;
+      height: 19px;
+      object-fit: contain;
+    }
+
+    /* Hero Right */
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 415px;
+      height: 503px;
+    }
+
+    .hero-right-top {
+      background: var(--card);
+      border-radius: 16px;
+      height: 194px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .hero-rt-inner {
+      display: flex;
+      gap: 9px;
+      align-items: flex-end;
+      width: 100%;
+    }
+
+    .hero-rt-text {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 16px 0;
+      width: 221px;
+      flex-shrink: 0;
+    }
+
+    .hero-rt-title {
+      font-weight: 900;
+      font-size: 24px;
+      line-height: 28px;
+      color: var(--white);
+      letter-spacing: -0.48px;
+    }
+
+    .hero-rt-desc {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 20px;
+      color: var(--aaa);
+    }
+
+    .hero-jars-clip {
+      width: 138px;
+      height: 186px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .hero-jars {
+      width: 138px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      transition: transform 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .hero-right-top:hover .hero-jars {
+      transform: translateY(-186px);
+    }
+
+    /* keep old rule shell so we don't break anything — merged above */
+    .hero-jars-compat {
+      flex-shrink: 0;
+    }
+
+    .jar-box {
+      width: 138px;
+      height: 95px;
+      background: var(--blue);
+      border-radius: 0 0 15px 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .jar-box img {
+      width: 74px;
+      height: 73px;
+      object-fit: cover;
+    }
+
+    .jar-box-flip {
+      width: 138px;
+      height: 91px;
+      background: var(--blue);
+      border-radius: 15px 15px 0 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .jar-box-flip img {
+      width: 74px;
+      height: 74px;
+      object-fit: cover;
+    }
+
+    .hero-right-bottom {
+      background: var(--card);
+      border-radius: 16px;
+      flex: 1;
+      padding: 24px;
+      overflow: hidden;
+    }
+
+    .hero-rb-inner {
+      display: flex;
+      gap: 16px;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .hero-rb-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none;
+      gap: 8px;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .hero-rb-title {
+      font-weight: 900;
+      font-size: 24px;
+      line-height: 28px;
+      color: var(--white);
+      letter-spacing: -0.48px;
+      flex-shrink: 0;
+    }
+
+    .hero-rb-text::-webkit-scrollbar { display: none; }
+
+    .hero-rb-desc {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 20px;
+      color: #a1a1a1;
+      overflow: visible;
+    }
+
+    .scrollbar-track {
+      width: 5.4px;
+      height: 100%;
+      max-height: 266px;
+      background: #222;
+      border-radius: 27px;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .scrollbar-thumb {
+      width: 5.4px;
+      height: 41px;
+      background: var(--white);
+      border-radius: 27px;
+    }
+
+    /* ======== QUOTE BANNER ======== */
+    .quote-banner {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .quote-text {
+      font-weight: 900;
+      font-size: 42px;
+      line-height: 46px;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: -0.84px;
+      max-width: 1015px;
+    }
+
+    .quote-text .accent { color: var(--amber); }
+
+    .quote-sub {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 20px;
+      color: var(--grey);
+      width: 393px;
+    }
+
+    /* ======== FEATURED PRODUCT ======== */
+    .featured-product {
+      display: flex;
+      gap: 16px;
+      height: 358px;
+    }
+
+    .fp-left {
+      width: 983px;
+      height: 358px;
+      background: var(--card);
+      border-radius: 16px;
+      position: relative;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .fp-text-area {
+      position: absolute;
+      left: 24px;
+      top: 24px;
+      width: 479px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .fp-subtitle-pill {
+      border: 0.6px solid var(--white);
+      border-radius: 30px;
+      padding: 4px 10px;
+      display: inline-flex;
+      align-self: flex-start;
+    }
+
+    .fp-subtitle-pill span {
+      font-weight: 600;
+      font-size: 10px;
+      line-height: 12px;
+      color: var(--white);
+      text-transform: uppercase;
+    }
+
+    .fp-name {
+      font-weight: 900;
+      font-size: 48px;
+      line-height: 52px;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: -2px;
+    }
+
+    .fp-price {
+      font-weight: 900;
+      font-size: 32px;
+      line-height: 36px;
+      color: var(--white);
+      letter-spacing: -2px;
+      text-transform: uppercase;
+    }
+
+    .fp-stars-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .fp-stars-row img {
+      height: 17px;
+      width: 92px;
+      object-fit: contain;
+    }
+
+    .fp-review-count {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 18px;
+      color: var(--white);
+    }
+
+    .fp-desc {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 20px;
+      color: var(--white);
+      width: 479px;
+    }
+
+    .fp-cta-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn-offset {
+      position: relative;
+      width: 278px;
+      height: 44px;
+      flex-shrink: 0;
+    }
+
+    .btn-offset-shadow {
+      position: absolute;
+      left: 2px;
+      top: 2px;
+      width: 278px;
+      height: 40px;
+      background: #000;
+      border-radius: 12px;
+    }
+
+    .btn-offset-face {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 278px;
+      height: 40px;
+      background: var(--amber);
+      border: 1px solid #000;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .btn-offset-face span {
+      font-weight: 900;
+      font-size: 16px;
+      line-height: 20px;
+      color: #000;
+      text-transform: uppercase;
+    }
+
+    .fp-view-link {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 18px;
+      color: var(--white);
+      text-transform: uppercase;
+      text-decoration: none;
+      border-bottom: 1px solid var(--blue);
+      padding-left: 11px;
+    }
+
+    .fp-img-bg {
+      position: absolute;
+      left: 517px;
+      top: 16px;
+      width: 444px;
+      height: 324px;
+      background: #1a1a2e;
+      border-radius: 20px;
+    }
+
+    .fp-product-img {
+      position: absolute;
+      left: 626px;
+      top: 36px;
+      width: 194px;
+      height: 282px;
+      object-fit: contain;
+      transform: none;    /* ZERO TILT - NO ROTATION */
+    }
+
+    .fp-arrows {
+      position: absolute;
+      left: 555px;
+      top: 164px;
+      width: 368px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .fp-right {
+      flex: 1;
+      height: 358px;
+      background: var(--blue);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 24px;
+      gap: 8px;
+    }
+
+    .fp-right-pill {
+      border: 0.7px solid var(--white);
+      border-radius: 55px;
+      padding: 4px 16px;
+      display: inline-flex;
+      align-self: flex-start;
+    }
+
+    .fp-right-pill span {
+      font-weight: 600;
+      font-size: 10px;
+      line-height: 12px;
+      color: var(--white);
+      text-transform: uppercase;
+    }
+
+    .fp-right-title {
+      font-weight: 900;
+      font-size: 32px;
+      line-height: 36px;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: -2px;
+      margin-bottom: 8px;
+    }
+
+    .fp-right-desc {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 20px;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    /* Arrow buttons */
+    .arrow-btn {
+      background: var(--white);
+      border: 1px solid var(--white);
+      border-radius: 50px;
+      width: 40px;
+      height: 39px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .arrow-btn img {
+      width: 19px;
+      height: 19px;
+      object-fit: contain;
+    }
+
+    /* ======== SECTION HEADER ======== */
+    .section-header {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .section-title {
+      font-weight: 900;
+      font-size: 32px;
+      line-height: 48px;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: -1px;
+    }
+
+    .section-link {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 18px;
+      color: var(--white);
+      text-decoration: none;
+      border-bottom: 1px solid var(--blue);
+    }
+
+    /* ======== FEATURED COLLECTION ======== */
+    .featured-collection {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .product-cards-row {
+      display: flex;
+      gap: 16px;
+    }
+
+    .product-card {
+      background: var(--card);
+      border-radius: 20px;
+      width: 312px;
+      height: 498px;
+      overflow: visible;
+      position: relative;
+      flex-shrink: 0;
+      /* clip-path instead of overflow:hidden — animatable so cup can rise above on hover */
+      clip-path: inset(0px 0px 0px 0px round 20px);
+      border: 1px solid transparent;
+      transition:
+        border-color 0.3s ease,
+        clip-path 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .product-card:hover {
+      border-color: var(--white);
+      clip-path: inset(-72px 0px 0px 0px round 20px);
+    }
+
+    .product-card-inner {
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      width: 280px;
+      height: 460px;
+    }
+
+    .pc-img-area {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 280px;
+      height: 272px;
+      border-radius: 16px;
+      overflow: visible;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pc-img-rotated {
+      transform: rotate(11.59deg);
+      width: 154px;
+      height: 224px;
+      box-shadow: 12px 10px 24px rgba(0,0,0,0.25);
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      margin-left: -77px;
+      margin-top: -112px;
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .product-card:hover .pc-img-rotated {
+      transform: rotate(0deg) translateY(-62px);
+    }
+
+    .pc-img-rotated img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .pc-info {
+      position: absolute;
+      left: 0;
+      top: 298px;
+      width: 280px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .pc-details {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .pc-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pc-brand {
+      border: 1px solid var(--white);
+      border-radius: 24px;
+      padding: 4px 16px;
+      display: inline-flex;
+    }
+
+    .pc-brand span {
+      font-weight: 600;
+      font-size: 10px;
+      line-height: 12px;
+      color: var(--white);
+      text-transform: uppercase;
+    }
+
+    .pc-name {
+      font-weight: 900;
+      font-size: 24px;
+      line-height: 28px;
+      color: var(--white);
+      letter-spacing: -0.48px;
+      text-align: center;
+    }
+
+    .product-card:hover .pc-name {
+      text-transform: uppercase;
+    }
+
+    .pc-desc {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 18px;
+      color: var(--white);
+      text-align: center;
+    }
+
+    .product-card:hover .pc-desc {
+      text-transform: uppercase;
+    }
+
+    .pc-price {
+      border: 0.674px solid var(--white);
+      border-radius: 13.5px;
+      padding: 10px 25px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: opacity 0.25s ease;
+    }
+
+    .product-card:hover .pc-price {
+      opacity: 0;
+    }
+
+    .pc-price-regular {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 18px;
+      color: var(--white);
+      text-transform: uppercase;
+    }
+
+    .pc-price-crossed {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 18px;
+      color: var(--grey);
+      text-decoration: line-through;
+    }
+
+    .pc-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-add-cart {
+      background: var(--white);
+      border: 1px solid var(--white);
+      border-radius: 12px;
+      box-shadow: 2px 2px 0 #000;
+      padding: 10px 20px;
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--card);
+      cursor: pointer;
+      flex: 1;
+      text-align: center;
+      white-space: nowrap;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    }
+
+    .product-card:hover .btn-add-cart {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: var(--white);
+    }
+
+    .btn-eye {
+      background: var(--card);
+      border: 1px solid var(--white);
+      border-radius: 12px;
+      width: 71px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .btn-eye img {
+      width: 19px;
+      height: 19px;
+      object-fit: contain;
+    }
+
+    .sale-badge {
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      border: 1px solid var(--white);
+      border-radius: 8px;
+      padding: 7px;
+      font-weight: 900;
+      font-size: 16px;
+      line-height: 20px;
+      color: var(--white);
+      z-index: 2;
+    }
+
+    /* Carousel arrows row */
+    .carousel-arrows {
+      display: flex;
+      gap: 4px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* ======== WHY US ======== */
+    .why-us {
+      display: flex;
+      gap: 16px;
+    }
+
+    .why-left {
+      background: var(--card);
+      border-radius: 20px;
+      width: 640px;
+      height: 376px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 16px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .why-pill-amber {
+      background: var(--amber);
+      border-radius: 100px;
+      padding: 4px 16px;
+      display: inline-flex;
+      align-self: flex-start;
+    }
+
+    .why-pill-amber span {
+      font-weight: 600;
+      font-size: 10px;
+      line-height: 12px;
+      color: #000;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .why-headline {
+      font-weight: 900;
+      font-size: 42px;
+      line-height: 44px;
+      color: var(--white);
+      letter-spacing: -2px;
+    }
+
+    .why-desc {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 22px;
+      color: var(--muted);
+      width: 560px;
+    }
+
+    .why-right {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      width: 640px;
+      flex-shrink: 0;
+      align-content: flex-start;
+    }
+
+    .why-card {
+      background: var(--card);
+      border-radius: 20px;
+      width: 312px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .why-card-icon {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+
+    .why-card-title {
+      font-weight: 900;
+      font-size: 16px;
+      line-height: 20px;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: -0.3px;
+      margin-bottom: 8px;
+    }
+
+    .why-card-desc {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 18px;
+      color: var(--muted);
+    }
+
+    /* ======== BLOG ======== */
+    .blog-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .blog-row {
+      display: flex;
+      gap: 16px;
+    }
+
+    .blog-featured {
+      background: var(--blue);
+      border-radius: 20px;
+      flex: 1;
+      height: 427px;
+      padding: 24px;
+      display: flex;
+      gap: 24px;
+      align-items: flex-end;
+      min-width: 0;
+    }
+
+    .blog-left-col {
+      width: 384px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      height: 100%;
+      gap: 0;
+    }
+
+    .blog-num {
+      font-weight: 900;
+      font-size: 93px;
+      line-height: 98px;
+      color: rgba(248,243,248,0.2);
+      text-transform: uppercase;
+      letter-spacing: -1.87px;
+    }
+
+    .blog-article-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-top: 8px;
+    }
+
+    .blog-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .blog-meta-row span {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 18px;
+      color: var(--white);
+      text-transform: uppercase;
+    }
+
+    .dot6 {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      object-fit: contain;
+    }
+
+    .blog-title {
+      font-weight: 900;
+      font-size: 32px;
+      line-height: 36px;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: -2px;
+    }
+
+    .blog-excerpt {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 20px;
+      color: var(--white);
+    }
+
+    .blog-tags {
+      display: flex;
+      gap: 8px;
+    }
+
+    .blog-tag {
+      border: 1px solid var(--white);
+      border-radius: 24px;
+      padding: 4px 16px;
+      font-weight: 600;
+      font-size: 10px;
+      line-height: 12px;
+      color: var(--white);
+      text-transform: uppercase;
+    }
+
+    .blog-divider-vert {
+      width: 1px;
+      height: 378px;
+      background: rgba(248,243,248,0.25);
+      flex-shrink: 0;
+      align-self: center;
+    }
+
+    .blog-right-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      padding: 16px 0;
+      min-width: 0;
+    }
+
+    .blog-read-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .blog-read-meta span {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 18px;
+      color: var(--white);
+      text-transform: uppercase;
+    }
+
+    .blog-quote {
+      font-weight: 900;
+      font-size: 24px;
+      line-height: 28px;
+      color: var(--white);
+      letter-spacing: -0.48px;
+    }
+
+    .blog-author-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .blog-author-info {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .blog-author-info span {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 18px;
+      color: var(--white);
+    }
+
+    .arrow-icon {
+      width: 15px;
+      height: 15px;
+      object-fit: contain;
+      cursor: pointer;
+    }
+
+    /* Blog side card */
+    .blog-side {
+      background: var(--card);
+      border-radius: 20px;
+      width: 373px;
+      height: 427px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+
+    .blog-side-img {
+      width: 100%;
+      height: 199px;
+      border-radius: 20px;
+      object-fit: cover;
+      flex-shrink: 0;
+      display: block;
+    }
+
+    .blog-side-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .blog-side-meta {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .blog-side-meta span {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 18px;
+      color: var(--aaa);
+      text-transform: uppercase;
+    }
+
+    .blog-side-title {
+      font-weight: 900;
+      font-size: 24px;
+      line-height: 28px;
+      color: var(--white);
+      letter-spacing: -0.48px;
+      margin-top: 8px;
+    }
+
+    .blog-side-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .divider-line {
+      width: 100%;
+      height: 1px;
+      background: rgba(248,243,248,0.2);
+    }
+
+    .blog-side-author {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .blog-side-author-info {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .blog-side-author-info span {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 18px;
+      color: var(--aaa);
+    }
+
+    /* ======== REVIEWS ======== */
+    .reviews-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .review-cards-row {
+      display: flex;
+      gap: 16px;
+    }
+
+    .review-agg {
+      background: var(--blue);
+      border-radius: 20px;
+      width: 312px;
+      height: 231px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      flex-shrink: 0;
+    }
+
+    .review-agg-label {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 18px;
+      color: var(--white);
+      text-transform: uppercase;
+    }
+
+    .review-agg-num {
+      font-weight: 900;
+      font-size: 48px;
+      line-height: 52px;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: -2px;
+    }
+
+    .review-agg-stars {
+      height: 17px;
+      width: 96px;
+      object-fit: contain;
+      margin-top: 8px;
+    }
+
+    .review-agg-count {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 18px;
+      color: var(--white);
+      margin-top: 8px;
+    }
+
+    .review-card {
+      background: var(--card);
+      border-radius: 20px;
+      width: 312px;
+      height: 231px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .review-top { display: flex; flex-direction: column; gap: 8px; }
+
+    .review-stars {
+      height: 17px;
+      width: 96px;
+      object-fit: contain;
+    }
+
+    .review-text {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 18px;
+      color: var(--white);
+    }
+
+    .review-bottom { display: flex; flex-direction: column; gap: 16px; }
+
+    .review-author-name {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 18px;
+      color: var(--white);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .review-product-info {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .review-product-info span {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 18px;
+      color: var(--aaa);
+    }
+
+    /* ======== NEWSLETTER ======== */
+    .newsletter {
+      background: var(--blue);
+      border-radius: 20px;
+      height: 185px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .newsletter-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      width: 489px;
+    }
+
+    .newsletter-title {
+      font-weight: 900;
+      font-size: 24px;
+      line-height: 28px;
+      color: var(--white);
+      letter-spacing: -0.48px;
+      text-align: center;
+    }
+
+    .newsletter-sub {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 20px;
+      color: var(--white);
+      text-align: center;
+    }
+
+    .newsletter-form {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .newsletter-input {
+      background: var(--white);
+      border: 1px solid #222;
+      border-radius: 10px;
+      width: 425px;
+      height: 39px;
+      padding: 5px 20px;
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 400;
+      font-size: 12px;
+      color: var(--grey);
+      outline: none;
+    }
+
+    .newsletter-submit {
+      background: var(--amber);
+      border: 1px solid #222;
+      border-radius: 50px;
+      width: 40px;
+      height: 39px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .newsletter-submit img {
+      width: 19px;
+      height: 19px;
+      object-fit: contain;
+    }
+
+    /* ======== FOOTER ======== */
+    .footer {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding-bottom: 24px;
+    }
+
+    .footer-social-bar {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .footer-signup-btn {
+      background: var(--card);
+      border-radius: 16px;
+      height: 64px;
+      width: 424px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .footer-signup-btn span {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 18px;
+      color: var(--white);
+      text-transform: uppercase;
+    }
+
+    .footer-socials {
+      display: flex;
+      gap: 7px;
+      align-items: stretch;
+    }
+
+    .footer-social-icon {
+      height: 65px;
+      border-radius: 20px;
+      overflow: hidden;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .footer-social-icon img {
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .footer-main {
+      background: var(--blue);
+      border-radius: 20px;
+      height: 247px;
+      padding: 24px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .footer-brand-col {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      width: 237px;
+    }
+
+    .footer-brand-name {
+      font-weight: 900;
+      font-size: 48px;
+      line-height: 52px;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: -2px;
+    }
+
+    .footer-brand-tagline {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 21.6px;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: -0.45px;
+    }
+
+    .footer-right-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: space-between;
+      height: 100%;
+      padding: 0 16px;
+    }
+
+    .footer-nav-cols {
+      display: flex;
+      gap: 13px;
+    }
+
+    .footer-nav-col {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .footer-nav-link {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 21.6px;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: -0.45px;
+      text-decoration: none;
+    }
+
+    .footer-region-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .footer-region-btn {
+      background: var(--card);
+      border: 0.48px solid #222;
+      border-radius: 8px;
+      height: 30px;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .footer-region-btn span {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 400;
+      font-size: 10px;
+      color: var(--white);
+      text-transform: uppercase;
+    }
+
+    .footer-bottom {
+      background: var(--blue);
+      border-radius: 16px;
+      height: 75px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-copyright {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .footer-copy-inner {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .footer-copy-text {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 21.6px;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: -0.45px;
+    }
+
+    .footer-koko-link {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 600;
+      font-size: 12.8px;
+      color: var(--white);
+      text-transform: uppercase;
+      border-bottom: 0.8px solid var(--white);
+      text-decoration: none;
+    }
+
+    .footer-shopify-link {
+      font-family: 'Red Hat Mono', monospace;
+      font-weight: 600;
+      font-size: 12px;
+      color: var(--white);
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--white);
+      text-decoration: none;
+    }
+
+    .footer-payments {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .footer-payments img {
+      height: 29px;
+      border-radius: 5px;
+      object-fit: cover;
+    }
+    /* ======================================================
+       ANIMATION SYSTEM
+       ====================================================== */
+
+    /* --- 1. 3D PRESS — .btn-offset (featured / why-us) --- */
+    .btn-offset-face {
+      transition: left 0.1s ease, top 0.1s ease;
+    }
+    .btn-offset:hover .btn-offset-face {
+      left: 2px;
+      top: 2px;
+    }
+
+    /* ADD TO CART 3D press (product cards) */
+    .btn-add-cart {
+      transition: background-color 0.3s ease, border-color 0.3s ease,
+                  color 0.3s ease, transform 0.1s ease, box-shadow 0.1s ease;
+    }
+    .btn-add-cart:hover {
+      transform: translate(2px, 2px);
+      box-shadow: none;
+    }
+
+    /* Hero KOKO badge amber arrow */
+    .arrow-circle {
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+    .arrow-circle:hover {
+      transform: translate(2px, 2px);
+      box-shadow: none !important;
+    }
+
+    /* --- 2. SECONDARY FILL — .btn-eye (eye icon) --- */
+    .btn-eye {
+      transition: background-color 0.3s ease;
+    }
+    .btn-eye:hover {
+      background: var(--blue);
+    }
+
+    /* --- 3. ARROW SLIDE-THROUGH — .arrow-btn --- */
+    .arrow-btn {
+      position: relative;
+      overflow: hidden;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+    .arrow-btn:hover {
+      background: var(--blue);
+      border-color: var(--blue);
+    }
+    /* Remove old flex-centered img rule; both imgs are absolutely positioned */
+    .arrow-btn img {
+      position: absolute;
+      width: 19px;
+      height: 19px;
+      object-fit: contain;
+      top: 50%;
+      left: 50%;
+    }
+    .arrow-btn .arrow-exit {
+      transform: translate(-50%, -50%);
+      transition: transform 0.32s ease;
+    }
+    .arrow-btn .arrow-enter {
+      transform: translate(calc(-50% - 56px), -50%);
+      transition: transform 0.32s ease;
+    }
+    .arrow-btn:hover .arrow-exit  { transform: translate(calc(-50% + 56px), -50%); }
+    .arrow-btn:hover .arrow-enter { transform: translate(-50%, -50%); }
+
+    /* Newsletter submit — same slide-through, amber stays */
+    .newsletter-submit {
+      position: relative;
+      overflow: hidden;
+    }
+    .newsletter-submit img {
+      position: absolute;
+      width: 19px;
+      height: 19px;
+      object-fit: contain;
+      top: 50%;
+      left: 50%;
+    }
+    .newsletter-submit .arrow-exit {
+      transform: translate(-50%, -50%);
+      transition: transform 0.32s ease;
+    }
+    .newsletter-submit .arrow-enter {
+      transform: translate(calc(-50% - 56px), -50%);
+      transition: transform 0.32s ease;
+    }
+    .newsletter-submit:hover .arrow-exit  { transform: translate(calc(-50% + 56px), -50%); }
+    .newsletter-submit:hover .arrow-enter { transform: translate(-50%, -50%); }
+
+    /* --- 4. ICON SCALE — sidebar icons, social icons, nav icons --- */
+    .sidebar-icon-btn {
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .sidebar-icon-btn:hover { transform: scale(1.12); }
+
+    .sidebar-search {
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .sidebar-search:hover { transform: scale(1.04); }
+
+    .footer-social-icon {
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+    }
+    .footer-social-icon:hover { transform: scale(1.08); }
+
+    .sidebar-nav-inner img.nav-icon {
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .sidebar-nav-item:hover .nav-icon { transform: scale(1.15); }
+
+    /* ======================================================
+       SCROLL REVEAL SYSTEM
+       ====================================================== */
+    .reveal-up,
+    .reveal-left,
+    .reveal-scale {
+      opacity: 0;
+      transition: opacity 0.7s ease, transform 0.7s ease;
+      will-change: opacity, transform;
+    }
+    .reveal-up    { transform: translateY(44px); }
+    .reveal-left  { transform: translateX(-44px); }
+    .reveal-scale { transform: scale(0.94); }
+
+    .reveal-up.visible,
+    .reveal-left.visible,
+    .reveal-scale.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ======================================================
+       SECTION HOVER POLISH
+       ====================================================== */
+    /* Why Us cards */
+    .why-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .why-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+    }
+
+    /* Review cards */
+    .review-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .review-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.3);
+    }
+
+    /* Blog cards */
+    .blog-featured {
+      transition: transform 0.35s ease;
+    }
+    .blog-featured:hover { transform: scale(1.008); }
+
+    .blog-side {
+      transition: transform 0.35s ease;
+    }
+    .blog-side:hover { transform: scale(1.008); }
+
+    /* Featured product — right blue card */
+    .fp-right {
+      transition: transform 0.35s ease;
+    }
+    .fp-right:hover { transform: scale(1.01); }
+
+    /* Hero right-bottom — subtle pulse on hover to signal scrollability */
+    .hero-right-bottom {
+      transition: box-shadow 0.3s ease;
+      cursor: default;
+    }
+    .hero-right-bottom:hover {
+      box-shadow: inset 0 0 0 1px rgba(248,243,248,0.12);
+    }
+
+    /* Announcement bar pauses on hover */
+    .announcement-bar:hover .announcement-track {
+      animation-play-state: paused;
+    }
+
+    /* Scrollbar thumb animated position (driven by JS) */
+    .scrollbar-thumb {
+      transition: top 0.15s ease;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="https://www.figma.com/api/mcp/asset/2393b0ac-fd62-4d31-adf8-a3bbeee7a77e" alt="KOKO">
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <!-- Icon row: user + bag -->
+      <div class="sidebar-icon-row">
+        <div class="sidebar-icon-btn">
+          <img src="https://www.figma.com/api/mcp/asset/2a07dd29-0079-43b3-9376-4277b0c3e685" alt="User">
+        </div>
+        <div class="sidebar-icon-btn">
+          <img src="https://www.figma.com/api/mcp/asset/41545c77-8a98-4d40-b31a-414805e71b20" alt="Cart">
+        </div>
+      </div>
+      <!-- Search bar -->
+      <div class="sidebar-search">
+        <img src="https://www.figma.com/api/mcp/asset/b4369929-e5b1-4206-bb7d-3f390b215962" alt="Search">
+      </div>
+    </div>
+
+    <!-- Nav items -->
+    <div class="sidebar-nav-group">
+      <div class="sidebar-nav-item">
+        <div class="sidebar-nav-inner">
+          <img class="nav-icon" src="https://www.figma.com/api/mcp/asset/95f49735-c748-4c88-adcd-4fd17a4a69ec" alt="">
+          <span class="sidebar-nav-label">About</span>
+        </div>
+      </div>
+      <div class="sidebar-nav-item">
+        <div class="sidebar-nav-inner">
+          <img class="nav-icon" src="https://www.figma.com/api/mcp/asset/3a4a7805-fb95-4384-9689-a31ee7afd426" alt="">
+          <div class="sidebar-nav-label-row">
+            <span class="sidebar-nav-label">Collection</span>
+            <img class="sidebar-nav-arrow" src="https://www.figma.com/api/mcp/asset/8136fd28-79e1-4bb0-8ecd-38067616c16d" alt="">
+          </div>
+        </div>
+      </div>
+      <div class="sidebar-nav-item">
+        <div class="sidebar-nav-inner">
+          <img class="nav-icon" src="https://www.figma.com/api/mcp/asset/3f96d5cd-7e2c-4b4c-af51-e89e60b28ec7" alt="">
+          <span class="sidebar-nav-label">Shop</span>
+        </div>
+      </div>
+      <div class="sidebar-nav-item">
+        <div class="sidebar-nav-inner">
+          <img class="nav-icon" src="https://www.figma.com/api/mcp/asset/d6e72ae4-0a8e-4f03-9905-1cc7192073e7" alt="">
+          <span class="sidebar-nav-label">Contact US</span>
+        </div>
+      </div>
+      <div class="sidebar-nav-item">
+        <div class="sidebar-nav-inner">
+          <img class="nav-icon" src="https://www.figma.com/api/mcp/asset/92ba5826-b9aa-4115-8a8a-fc394fe9ae0c" alt="">
+          <span class="sidebar-nav-label">Blogs</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="main">
+
+    <!-- ANNOUNCEMENT BAR -->
+    <div class="announcement-bar">
+      <div class="announcement-track">
+        <!-- 8 items (4 real + 4 duplicate for seamless loop) -->
+        <div class="ann-item"><span class="ann-text">FREE SHIPPING WORLDWIDE</span><div class="ann-sep"><img src="https://www.figma.com/api/mcp/asset/2889c865-d16b-41db-ac44-fb962b3df2a5" alt=""></div></div>
+        <div class="ann-item"><span class="ann-text">FREE SHIPPING WORLDWIDE</span><div class="ann-sep"><img src="https://www.figma.com/api/mcp/asset/0a30b676-c4a3-44a9-9dd4-3ee750dd63ea" alt=""></div></div>
+        <div class="ann-item"><span class="ann-text">FREE SHIPPING WORLDWIDE</span><div class="ann-sep"><img src="https://www.figma.com/api/mcp/asset/fce8a4c4-9b63-4248-b0e2-7fc51fb80b0b" alt=""></div></div>
+        <div class="ann-item"><span class="ann-text">FREE SHIPPING WORLDWIDE</span><div class="ann-sep"><img src="https://www.figma.com/api/mcp/asset/907b724f-310f-4299-a35a-3815685db9c5" alt=""></div></div>
+        <div class="ann-item"><span class="ann-text">FREE SHIPPING WORLDWIDE</span><div class="ann-sep"><img src="https://www.figma.com/api/mcp/asset/2889c865-d16b-41db-ac44-fb962b3df2a5" alt=""></div></div>
+        <div class="ann-item"><span class="ann-text">FREE SHIPPING WORLDWIDE</span><div class="ann-sep"><img src="https://www.figma.com/api/mcp/asset/0a30b676-c4a3-44a9-9dd4-3ee750dd63ea" alt=""></div></div>
+        <div class="ann-item"><span class="ann-text">FREE SHIPPING WORLDWIDE</span><div class="ann-sep"><img src="https://www.figma.com/api/mcp/asset/fce8a4c4-9b63-4248-b0e2-7fc51fb80b0b" alt=""></div></div>
+        <div class="ann-item"><span class="ann-text">FREE SHIPPING WORLDWIDE</span><div class="ann-sep"><img src="https://www.figma.com/api/mcp/asset/907b724f-310f-4299-a35a-3815685db9c5" alt=""></div></div>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+
+      <!-- Left: Blue editorial card -->
+      <div class="hero-left">
+        <div class="hero-left-inner">
+          <div class="pill"><span>Coffee</span></div>
+          <p class="hero-headline">Built for the <span class="accent">moments</span> in between.</p>
+          <p class="hero-subtext">Crafted for slow mornings, long nights, and everything in between.</p>
+          <div class="hero-ctas">
+            <a href="#" class="btn-amber">SHOP COFFEE</a>
+            <a href="#" class="btn-ghost-white">OUR STORY</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center: Hero photo — NO TILT -->
+      <div class="hero-center">
+        <img class="hero-photo"
+             src="https://www.figma.com/api/mcp/asset/de14f9db-5ec4-4c1f-bb62-faef42358a45"
+             alt="KOKO Cold Brew"
+             style="transform:none;">
+        <!-- Circular KOKO badge with arrow -->
+        <div class="hero-koko-badge">
+          <svg viewBox="0 0 84 84" width="84" height="84">
+            <defs>
+              <path id="koko-circle" d="M42,42 m-30,0 a30,30 0 1,1 60,0 a30,30 0 1,1 -60,0"/>
+            </defs>
+            <text style="font-family:'Inter',sans-serif;font-size:6.5px;fill:#222222;font-weight:900;letter-spacing:1.8px;text-transform:uppercase;">
+              <textPath href="#koko-circle" startOffset="0%">KOKO KOKO KOKO KOKO KOKO KOKO KOKO </textPath>
+            </text>
+          </svg>
+          <div class="arrow-circle">
+            <img src="https://www.figma.com/api/mcp/asset/a43dfa3e-53d9-490c-8db9-9cca47672fbd" alt="→">
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Two info cards -->
+      <div class="hero-right">
+        <!-- Top: Dessert Jars -->
+        <div class="hero-right-top">
+          <div class="hero-rt-inner">
+            <div class="hero-rt-text">
+              <div class="pill"><span>SHOP COLLECTION</span></div>
+              <p class="hero-rt-title">Dessert Jars</p>
+              <p class="hero-rt-desc">Layers of cake, cream, and pure happiness.</p>
+            </div>
+            <div class="hero-jars-clip">
+              <div class="hero-jars">
+                <div class="jar-box">
+                  <img src="https://www.figma.com/api/mcp/asset/0d9eb085-992c-4e72-9446-ec3c43c996c4" alt="Jar 1">
+                </div>
+                <div class="jar-box-flip">
+                  <img src="https://www.figma.com/api/mcp/asset/e0b0d9ea-d053-4160-8bcd-610aeefd40b1" alt="Jar 2">
+                </div>
+                <!-- duplicates for scroll loop -->
+                <div class="jar-box">
+                  <img src="https://www.figma.com/api/mcp/asset/0d9eb085-992c-4e72-9446-ec3c43c996c4" alt="Jar 1">
+                </div>
+                <div class="jar-box-flip">
+                  <img src="https://www.figma.com/api/mcp/asset/e0b0d9ea-d053-4160-8bcd-610aeefd40b1" alt="Jar 2">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Bottom: Brewed for Good Days -->
+        <div class="hero-right-bottom">
+          <div class="hero-rb-inner">
+            <div class="hero-rb-text">
+              <p class="hero-rb-title">Brewed for Good Days</p>
+              <p class="hero-rb-desc">From your first sip to your last crumb, KOKO is all about feel-good flavors and unforgettable café moments. Every cup is brewed with care, every treat baked with warmth, and every visit slow things down just enough for you to savor it. Bold coffees, smooth lattes, and indulgent sweet treats come together with cozy café vibes to create a space where good conversations, comforting aromas, and beautiful little moments happen every day.</p>
+            </div>
+            <div class="scrollbar-track">
+              <div class="scrollbar-thumb"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /hero -->
+
+    <!-- QUOTE BANNER -->
+    <div class="quote-banner reveal-up">
+      <p class="quote-text">"A COLD BREW THAT TAKES SHORTCUTS IS JUST <span class="accent">COLD COFFEE</span> "</p>
+      <p class="quote-sub">Crafted for slow mornings, long nights, and everything in between.</p>
+    </div>
+
+    <!-- FEATURED PRODUCT -->
+    <div class="featured-product">
+
+      <!-- Left: dark product card -->
+      <div class="fp-left reveal-left">
+        <!-- Text area -->
+        <div class="fp-text-area">
+          <div>
+            <div class="fp-subtitle-pill"><span>BEAR WITH ME</span></div>
+          </div>
+          <p class="fp-name">Arctic Cold Brew</p>
+          <p class="fp-price">$120</p>
+          <div class="fp-stars-row">
+            <img src="https://www.figma.com/api/mcp/asset/b7d0665e-32f3-4b37-a96f-cf382b09d844" alt="5 stars">
+            <span class="fp-review-count">3 reviews</span>
+          </div>
+          <p class="fp-desc">Cold-extracted for 18 hours. Rich, smooth, and never bitter — a ritual worth waking up for. Every cup we make is traceable to its source.</p>
+          <div class="fp-cta-row">
+            <div class="btn-offset">
+              <div class="btn-offset-shadow"></div>
+              <div class="btn-offset-face"><span>ADD TO CART</span></div>
+            </div>
+            <a href="#" class="fp-view-link">VIEW FULL DETAILS</a>
+          </div>
+        </div>
+
+        <!-- Dark image bg rect -->
+        <div class="fp-img-bg"></div>
+
+        <!-- Product image — ZERO TILT -->
+        <img class="fp-product-img"
+             src="https://www.figma.com/api/mcp/asset/86ff24cf-8eec-44da-9f5f-e4abebbd5cd3"
+             alt="Arctic Cold Brew"
+             style="transform:none;">
+
+        <!-- Navigation arrows -->
+        <div class="fp-arrows">
+          <div class="arrow-btn">
+            <img class="arrow-exit" src="https://www.figma.com/api/mcp/asset/8aa9daa0-dcc1-467e-8f4c-99a75f721698" alt="←">
+            <img class="arrow-enter" src="https://www.figma.com/api/mcp/asset/8aa9daa0-dcc1-467e-8f4c-99a75f721698" alt="←">
+          </div>
+          <div class="arrow-btn">
+            <img class="arrow-exit" src="https://www.figma.com/api/mcp/asset/ad1b4df6-8fc2-4bff-a693-bf44a57dae28" alt="→">
+            <img class="arrow-enter" src="https://www.figma.com/api/mcp/asset/ad1b4df6-8fc2-4bff-a693-bf44a57dae28" alt="→">
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: blue info card -->
+      <div class="fp-right reveal-up">
+        <div class="fp-right-pill"><span>BEAR WITH ME</span></div>
+        <p class="fp-right-title">6 BLENDS<br>1 STANDARDS</p>
+        <p class="fp-right-desc">Crafted for slow mornings, long nights, and everything in between.</p>
+        <a href="#" class="btn-amber" style="box-shadow:2px 2px 0 #000;width:226px;">VIEW COLLECTION</a>
+      </div>
+
+    </div><!-- /featured product -->
+
+    <!-- FEATURED COLLECTION -->
+    <div class="featured-collection reveal-up">
+      <div class="section-header">
+        <span class="section-title">Featured Collection</span>
+        <a href="#" class="section-link">View All</a>
+      </div>
+      <div class="product-cards-row">
+
+        <!-- Card 1: Flat White (SALE) -->
+        <div class="product-card">
+          <span class="sale-badge">60% off</span>
+          <div class="product-card-inner">
+            <div class="pc-img-area">
+              <div class="pc-img-rotated">
+                <img src="https://www.figma.com/api/mcp/asset/586058a6-e8a8-48ca-a6e8-d614dbe78c0a" alt="Flat White">
+              </div>
+            </div>
+            <div class="pc-info">
+              <div class="pc-details">
+                <div class="pc-center">
+                  <div class="pc-brand"><span>BEAR WITH ME</span></div>
+                  <p class="pc-name">Flat White</p>
+                  <p class="pc-desc">A smooth, velvety blend of rich espresso and finely textured milk, balanced with subtle sweetness.</p>
+                </div>
+                <div class="pc-price"><span class="pc-price-crossed">$120</span><span class="pc-price-regular">$104</span></div>
+              </div>
+              <div class="pc-actions">
+                <div class="btn-add-cart">ADD TO CART</div>
+                <div class="btn-eye"><img src="https://www.figma.com/api/mcp/asset/f2237cda-023c-4132-882c-8fd7c902ffcc" alt="View"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: OG Matcha -->
+        <div class="product-card">
+          <div class="product-card-inner">
+            <div class="pc-img-area">
+              <div class="pc-img-rotated">
+                <img src="https://www.figma.com/api/mcp/asset/c7b0f703-2a3d-43c7-a77f-db77538f49b0" alt="OG Matcha">
+              </div>
+            </div>
+            <div class="pc-info">
+              <div class="pc-details">
+                <div class="pc-center">
+                  <div class="pc-brand"><span>BEAR WITH ME</span></div>
+                  <p class="pc-name">The OG matcha</p>
+                  <p class="pc-desc">Stone-ground matcha blended into a smooth, earthy cup with a balanced bitterness and a soft, creamy finish.</p>
+                </div>
+                <div class="pc-price"><span class="pc-price-regular">$120</span></div>
+              </div>
+              <div class="pc-actions">
+                <div class="btn-add-cart">ADD TO CART</div>
+                <div class="btn-eye"><img src="https://www.figma.com/api/mcp/asset/f2237cda-023c-4132-882c-8fd7c902ffcc" alt="View"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Caramel Drift -->
+        <div class="product-card">
+          <div class="product-card-inner">
+            <div class="pc-img-area">
+              <div class="pc-img-rotated">
+                <img src="https://www.figma.com/api/mcp/asset/4d9226e1-8b63-4c8c-b526-8d8656c0efc9" alt="Caramel Drift">
+              </div>
+            </div>
+            <div class="pc-info">
+              <div class="pc-details">
+                <div class="pc-center">
+                  <div class="pc-brand"><span>BEAR WITH ME</span></div>
+                  <p class="pc-name">Caramel Drift</p>
+                  <p class="pc-desc">A warm, comforting blend where rich caramel notes melt into a gently roasted base.</p>
+                </div>
+                <div class="pc-price"><span class="pc-price-regular">$120</span></div>
+              </div>
+              <div class="pc-actions">
+                <div class="btn-add-cart">ADD TO CART</div>
+                <div class="btn-eye"><img src="https://www.figma.com/api/mcp/asset/f2237cda-023c-4132-882c-8fd7c902ffcc" alt="View"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4: Oatmeal Blast -->
+        <div class="product-card">
+          <div class="product-card-inner">
+            <div class="pc-img-area">
+              <div class="pc-img-rotated">
+                <img src="https://www.figma.com/api/mcp/asset/34516bd8-3bec-43e1-95bc-e63f7687f5e3" alt="Oatmeal Blast">
+              </div>
+            </div>
+            <div class="pc-info">
+              <div class="pc-details">
+                <div class="pc-center">
+                  <div class="pc-brand"><span>BEAR WITH ME</span></div>
+                  <p class="pc-name">Oatmeal Blast</p>
+                  <p class="pc-desc">Creamy oat milk meets a mellow roast, creating a soft, velvety texture with subtle nutty warmth.</p>
+                </div>
+                <div class="pc-price"><span class="pc-price-regular">$120</span></div>
+              </div>
+              <div class="pc-actions">
+                <div class="btn-add-cart">ADD TO CART</div>
+                <div class="btn-eye"><img src="https://www.figma.com/api/mcp/asset/f2237cda-023c-4132-882c-8fd7c902ffcc" alt="View"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="carousel-arrows">
+        <div class="arrow-btn">
+          <img class="arrow-exit" src="https://www.figma.com/api/mcp/asset/8aa9daa0-dcc1-467e-8f4c-99a75f721698" alt="←">
+          <img class="arrow-enter" src="https://www.figma.com/api/mcp/asset/8aa9daa0-dcc1-467e-8f4c-99a75f721698" alt="←">
+        </div>
+        <div class="arrow-btn">
+          <img class="arrow-exit" src="https://www.figma.com/api/mcp/asset/ad1b4df6-8fc2-4bff-a693-bf44a57dae28" alt="→">
+          <img class="arrow-enter" src="https://www.figma.com/api/mcp/asset/ad1b4df6-8fc2-4bff-a693-bf44a57dae28" alt="→">
+        </div>
+      </div>
+    </div><!-- /featured collection -->
+
+    <!-- WHY US -->
+    <div class="why-us">
+      <div class="why-left reveal-left">
+        <div class="why-pill-amber"><span>Why Us</span></div>
+        <p class="why-headline">WE'RE OBSESSED WITH GETTING IT RIGHT.</p>
+        <p class="why-desc">Most cold brew is rushed. Diluted. Compromised. KOKO exists because we refused to accept that. Every decision we make — sourcing, steeping, bottling — starts with one question: is this the best it can be?</p>
+        <div class="btn-offset" style="width:278px;">
+          <div class="btn-offset-shadow"></div>
+          <div class="btn-offset-face"><span>OUR STANDARDS</span></div>
+        </div>
+      </div>
+      <div class="why-right">
+        <div class="why-card">
+          <img class="why-card-icon" src="https://www.figma.com/api/mcp/asset/830fd058-a236-436f-b0a9-0936c98254b4" alt="">
+          <div>
+            <p class="why-card-title">No Sugar Added</p>
+            <p class="why-card-desc">Clean energy, zero crash. Just the natural sweetness of properly extracted arabica.</p>
+          </div>
+        </div>
+        <div class="why-card">
+          <img class="why-card-icon" src="https://www.figma.com/api/mcp/asset/aa54c603-4900-4a79-893e-3f304ed9a0ba" alt="">
+          <div>
+            <p class="why-card-title">72H Extraction</p>
+            <p class="why-card-desc">Time is the only ingredient you can't rush. 72 hours of cold steeping unlocks what heat destroys.</p>
+          </div>
+        </div>
+        <div class="why-card">
+          <img class="why-card-icon" src="https://www.figma.com/api/mcp/asset/0498ba3d-c69e-4930-955f-5c736660a05b" alt="">
+          <div>
+            <p class="why-card-title">Single Origin</p>
+            <p class="why-card-desc">We know exactly which farm, which region, which harvest. Traceable to the source, every time.</p>
+          </div>
+        </div>
+        <div class="why-card">
+          <img class="why-card-icon" src="https://www.figma.com/api/mcp/asset/1303d9a4-96b0-4fd3-aa63-232a33072c3e" alt="">
+          <div>
+            <p class="why-card-title">Specialty Grade</p>
+            <p class="why-card-desc">Top 1% arabica only. Sourced from elevation farms. If it scores below 80, it doesn't make the cut.</p>
+          </div>
+        </div>
+      </div>
+    </div><!-- /why us -->
+
+    <!-- BLOG -->
+    <div class="blog-section reveal-up">
+      <div class="blog-row">
+
+        <!-- Featured blog (blue, main) -->
+        <div class="blog-featured">
+          <!-- Left: article info -->
+          <div class="blog-left-col">
+            <p class="blog-num">01</p>
+            <div class="blog-article-meta">
+              <div class="blog-meta-row">
+                <span>FEATURED</span>
+                <img class="dot6" src="https://www.figma.com/api/mcp/asset/4fad1ca9-99f6-4ce9-bf9d-6310b36dde5c" alt="">
+                <span>18 MARCH 2026</span>
+              </div>
+              <p class="blog-title">KOKO X TWO BIRDS: A MATCHA COLLAB</p>
+              <p class="blog-excerpt">We partnered with two birds to create something neither of us could have made alone. Here's the full story behind the collab - from first call to final blend</p>
+              <div class="blog-tags">
+                <span class="blog-tag">News</span>
+                <span class="blog-tag">COLLAB</span>
+                <span class="blog-tag">MATCHA</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Vertical divider -->
+          <div class="blog-divider-vert"></div>
+
+          <!-- Right: quote + author -->
+          <div class="blog-right-col">
+            <div>
+              <div class="blog-read-meta">
+                <span>4 MIN READ</span>
+                <img class="dot6" src="https://www.figma.com/api/mcp/asset/4fad1ca9-99f6-4ce9-bf9d-6310b36dde5c" alt="">
+                <span>14 MARCH 2026</span>
+              </div>
+              <p class="blog-quote">"Two brands, one obsession: doing something the right way regardless of how long it takes."</p>
+            </div>
+            <div class="blog-author-row">
+              <div class="blog-author-info">
+                <span>Mia Kato</span>
+                <img class="dot6" src="https://www.figma.com/api/mcp/asset/4fad1ca9-99f6-4ce9-bf9d-6310b36dde5c" alt="">
+                <span>Head of Product</span>
+              </div>
+              <img class="arrow-icon" src="https://www.figma.com/api/mcp/asset/cc8919e2-2011-4500-ba1d-b9495252cc85" alt="→">
+            </div>
+          </div>
+        </div>
+
+        <!-- Side blog card (dark) -->
+        <div class="blog-side">
+          <img class="blog-side-img" src="https://www.figma.com/api/mcp/asset/fe9130e1-7b89-4ef1-9559-61636042bc25" alt="Blog cover">
+          <div class="blog-side-body">
+            <div>
+              <div class="blog-side-meta">
+                <span>FEATURED</span>
+                <img class="dot6" src="https://www.figma.com/api/mcp/asset/0beb7bfb-0726-4ae3-8c13-95f93ea85abe" alt="">
+                <span>18 MARCH 2026</span>
+              </div>
+              <p class="blog-side-title">KOKO X TWO BIRDS: A MATCHA COLLAB</p>
+            </div>
+            <div class="blog-side-footer">
+              <div class="divider-line"></div>
+              <div class="blog-side-author">
+                <div class="blog-side-author-info">
+                  <span>Mia Kato</span>
+                  <img class="dot6" src="https://www.figma.com/api/mcp/asset/0beb7bfb-0726-4ae3-8c13-95f93ea85abe" alt="">
+                  <span>Head of Product</span>
+                </div>
+                <img class="arrow-icon" src="https://www.figma.com/api/mcp/asset/cc8919e2-2011-4500-ba1d-b9495252cc85" alt="→">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <!-- Blog nav arrows -->
+      <div class="carousel-arrows">
+        <div class="arrow-btn">
+          <img class="arrow-exit" src="https://www.figma.com/api/mcp/asset/8aa9daa0-dcc1-467e-8f4c-99a75f721698" alt="←">
+          <img class="arrow-enter" src="https://www.figma.com/api/mcp/asset/8aa9daa0-dcc1-467e-8f4c-99a75f721698" alt="←">
+        </div>
+        <div class="arrow-btn">
+          <img class="arrow-exit" src="https://www.figma.com/api/mcp/asset/ad1b4df6-8fc2-4bff-a693-bf44a57dae28" alt="→">
+          <img class="arrow-enter" src="https://www.figma.com/api/mcp/asset/ad1b4df6-8fc2-4bff-a693-bf44a57dae28" alt="→">
+        </div>
+      </div>
+    </div><!-- /blog -->
+
+    <!-- REVIEWS -->
+    <div class="reviews-section reveal-up">
+      <div class="section-header">
+        <span class="section-title">What They're Saying</span>
+        <a href="#" class="section-link">View All</a>
+      </div>
+      <div class="review-cards-row">
+
+        <!-- Aggregate rating card (blue) -->
+        <div class="review-agg">
+          <p class="review-agg-label">average rating</p>
+          <p class="review-agg-num">4.9</p>
+          <img class="review-agg-stars" src="https://www.figma.com/api/mcp/asset/08ce95e9-b523-458c-82bc-4303eb95a3b9" alt="5 stars">
+          <p class="review-agg-count">Based on 127 verified reviews</p>
+        </div>
+
+        <!-- Review card 1 -->
+        <div class="review-card">
+          <div class="review-top">
+            <img class="review-stars" src="https://www.figma.com/api/mcp/asset/ec286318-da3f-4998-8717-96467b6cc7f3" alt="5 stars">
+            <p class="review-text">"I've tried every cold brew on the market. Nothing comes close. The Arctic Cold Brew is smooth in a way that makes you slow down. Worth every cent."</p>
+          </div>
+          <div class="review-bottom">
+            <div class="divider-line"></div>
+            <div>
+              <p class="review-author-name">Sarah M.</p>
+              <div class="review-product-info">
+                <span>Arctic Cold Brew</span>
+                <img class="dot6" src="https://www.figma.com/api/mcp/asset/fc5721e0-d44c-4865-ba7a-b045051a0f66" alt="">
+                <span>March 2026</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review card 2 -->
+        <div class="review-card">
+          <div class="review-top">
+            <img class="review-stars" src="https://www.figma.com/api/mcp/asset/ec286318-da3f-4998-8717-96467b6cc7f3" alt="5 stars">
+            <p class="review-text">"I've sampled every cold brew available, but none compare. The Arctic Cold Brew is so smooth that it encourages you to take a moment to savor it."</p>
+          </div>
+          <div class="review-bottom">
+            <div class="divider-line"></div>
+            <div>
+              <p class="review-author-name">Emily R.</p>
+              <div class="review-product-info">
+                <span>Glacial Brew</span>
+                <img class="dot6" src="https://www.figma.com/api/mcp/asset/fc5721e0-d44c-4865-ba7a-b045051a0f66" alt="">
+                <span>April 2027</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review card 3 -->
+        <div class="review-card">
+          <div class="review-top">
+            <img class="review-stars" src="https://www.figma.com/api/mcp/asset/ec286318-da3f-4998-8717-96467b6cc7f3" alt="5 stars">
+            <p class="review-text">"I've been a barista for over 15 years, and this cold brew is in a class of its own. The Arctic Cold Brew is incredibly smooth and has a unique flavor profile."</p>
+          </div>
+          <div class="review-bottom">
+            <div class="divider-line"></div>
+            <div>
+              <p class="review-author-name">Jamie K.</p>
+              <div class="review-product-info">
+                <span>Midnight Sun Blend</span>
+                <img class="dot6" src="https://www.figma.com/api/mcp/asset/fc5721e0-d44c-4865-ba7a-b045051a0f66" alt="">
+                <span>June 2028</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /reviews -->
+
+    <!-- NEWSLETTER -->
+    <div class="newsletter reveal-scale">
+      <div class="newsletter-inner">
+        <p class="newsletter-title">Subscribe to our Newsletter</p>
+        <p class="newsletter-sub">Be the first to know about new collections and exclusive offers</p>
+        <div class="newsletter-form">
+          <input class="newsletter-input" type="email" placeholder="Email Address">
+          <button class="newsletter-submit">
+            <img class="arrow-exit" src="https://www.figma.com/api/mcp/asset/773f8d48-5bc8-4e63-8bfa-55189cc622b3" alt="Send">
+            <img class="arrow-enter" src="https://www.figma.com/api/mcp/asset/773f8d48-5bc8-4e63-8bfa-55189cc622b3" alt="Send">
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+
+      <!-- Social top bar -->
+      <div class="footer-social-bar">
+        <div class="footer-signup-btn">
+          <span>Sign up for updates</span>
+        </div>
+        <div class="footer-socials">
+          <div class="footer-social-icon" style="width:168px;">
+            <img src="https://www.figma.com/api/mcp/asset/f596cc78-b157-4302-915f-b45753803e10" alt="Instagram">
+          </div>
+          <div class="footer-social-icon" style="width:166px;">
+            <img src="https://www.figma.com/api/mcp/asset/3876bf74-18d2-4249-a914-dcce7bfd5ced" alt="YouTube">
+          </div>
+          <div class="footer-social-icon" style="background:var(--card);width:168px;height:65px;">
+            <img src="https://www.figma.com/api/mcp/asset/d79b71b7-3934-4dcc-90dc-da1dca3504be" alt="Facebook" style="width:37px;height:41px;object-fit:contain;">
+          </div>
+          <div class="footer-social-icon" style="width:166px;">
+            <img src="https://www.figma.com/api/mcp/asset/bc23085b-48d7-4dfe-aac9-5edcea30f567" alt="Social 4">
+          </div>
+          <div class="footer-social-icon" style="width:168px;">
+            <img src="https://www.figma.com/api/mcp/asset/db010a4a-b930-45a3-b4a3-53aa0b2586ea" alt="Social 5">
+          </div>
+        </div>
+      </div>
+
+      <!-- Main footer (blue) -->
+      <div class="footer-main">
+        <div class="footer-brand-col">
+          <p class="footer-brand-name">KOKO</p>
+          <p class="footer-brand-tagline">COLD BREW COFFEE</p>
+        </div>
+        <div class="footer-right-col">
+          <div class="footer-nav-cols">
+            <div class="footer-nav-col">
+              <a href="#" class="footer-nav-link">ABOUT</a>
+              <a href="#" class="footer-nav-link">SHOP</a>
+              <a href="#" class="footer-nav-link">COLLECTION</a>
+              <a href="#" class="footer-nav-link">MENU</a>
+            </div>
+            <div class="footer-nav-col">
+              <a href="#" class="footer-nav-link">BLOGS</a>
+              <a href="#" class="footer-nav-link">CONTACT</a>
+              <a href="#" class="footer-nav-link">CAREERS</a>
+              <a href="#" class="footer-nav-link">FAQ</a>
+            </div>
+          </div>
+          <div class="footer-region-row">
+            <div class="footer-region-btn">
+              <span>🇮🇳</span>
+              <span>INDIA ▾</span>
+            </div>
+            <div class="footer-region-btn">
+              <span>🇬🇧</span>
+              <span>ENGLISH ▾</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="footer-bottom">
+        <div class="footer-copyright">
+          <div class="footer-copy-inner">
+            <span class="footer-copy-text">Copyright © 2026</span>
+            <a href="#" class="footer-koko-link">KOKO</a>
+          </div>
+          <a href="#" class="footer-shopify-link">POWERED BY SHOPIFY</a>
+        </div>
+        <div class="footer-payments">
+          <img src="https://www.figma.com/api/mcp/asset/9ee6f9d6-7b17-423e-aef5-88e6637b5876" alt="Visa" style="width:47px;">
+          <img src="https://www.figma.com/api/mcp/asset/9ee6f9d6-7b17-423e-aef5-88e6637b5876" alt="Mastercard" style="width:47px;">
+          <img src="https://www.figma.com/api/mcp/asset/9ee6f9d6-7b17-423e-aef5-88e6637b5876" alt="Amex" style="width:50px;">
+          <img src="https://www.figma.com/api/mcp/asset/9ee6f9d6-7b17-423e-aef5-88e6637b5876" alt="PayPal" style="width:47px;">
+          <img src="https://www.figma.com/api/mcp/asset/9ee6f9d6-7b17-423e-aef5-88e6637b5876" alt="Diners" style="width:46px;">
+          <img src="https://www.figma.com/api/mcp/asset/9ee6f9d6-7b17-423e-aef5-88e6637b5876" alt="Discover" style="width:47px;">
+        </div>
+      </div>
+
+    </div><!-- /footer -->
+
+  </main>
+
+  <script>
+    /* ── 1. SCROLL REVEAL ── */
+    const revealEls = document.querySelectorAll('.reveal-up, .reveal-left, .reveal-scale');
+
+    // Stagger product cards, why-cards, review-cards
+    document.querySelectorAll('.product-card').forEach((el, i) => {
+      el.classList.add('reveal-up');
+      el.style.transitionDelay = `${i * 0.1}s`;
+    });
+    document.querySelectorAll('.why-card').forEach((el, i) => {
+      el.classList.add('reveal-up');
+      el.style.transitionDelay = `${i * 0.12}s`;
+    });
+    document.querySelectorAll('.review-card').forEach((el, i) => {
+      el.classList.add('reveal-up');
+      el.style.transitionDelay = `${i * 0.1}s`;
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target); // fire once
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal-up, .reveal-left, .reveal-scale').forEach(el => observer.observe(el));
+
+    /* ── 2. SCROLLABLE TEXT CARD — custom scrollbar thumb sync ── */
+    const rbText   = document.querySelector('.hero-rb-text');
+    const sbThumb  = document.querySelector('.scrollbar-thumb');
+    const sbTrack  = document.querySelector('.scrollbar-track');
+
+    if (rbText && sbThumb && sbTrack) {
+      rbText.addEventListener('scroll', () => {
+        const { scrollTop, scrollHeight, clientHeight } = rbText;
+        const trackH  = sbTrack.clientHeight;
+        const thumbH  = sbThumb.clientHeight;
+        const ratio   = scrollTop / (scrollHeight - clientHeight);
+        sbThumb.style.top = `${ratio * (trackH - thumbH)}px`;
+      });
+
+      // Click on track to jump
+      sbTrack.addEventListener('click', (e) => {
+        const rect  = sbTrack.getBoundingClientRect();
+        const ratio = (e.clientY - rect.top) / rect.height;
+        const { scrollHeight, clientHeight } = rbText;
+        rbText.scrollTop = ratio * (scrollHeight - clientHeight);
+      });
+    }
+  </script>
+</body>
+</html>
